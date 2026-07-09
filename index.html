@@ -3,616 +3,1337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>שאלון חזון ואסטרטגיה כלכלית - טללים</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Assistant for Hebrew) -->
-    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <title>שאלון חזון כלכלי-אסטרטגי - קיבוץ טללים</title>
+    <!-- Premium Hebrew Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
+        /* 1. SETUP & THEME VARIABLES */
+        :root {
+            --bg-base: #FAF8F5; /* Warm Desert Sand */
+            --primary-slate: #1E2E2E; /* Deep Slate Charcoal */
+            --secondary-gray: #4D5C58; /* Muted Green-Gray */
+            --accent-terracotta: #C2410C; /* Rich Negev Clay */
+            --accent-olive: #5B6E58; /* Olive Green */
+            --card-bg: #FFFFFF;
+            --card-border: #E6DFD5;
+            --progress-bg: #EAE6DF;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.2s ease-in-out;
+        }
+
         body {
+            background-color: #F3ECE3;
+            color: var(--primary-slate);
             font-family: 'Assistant', sans-serif;
-            background: linear-gradient(135deg, #fefaf6 0%, #f0f7f4 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
+
+        /* Container Layout */
+        .wrapper {
+            width: 100%;
+            max-width: 800px;
+            margin: 40px 20px;
+            background: var(--bg-base);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+            position: relative;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
+
+        /* Header Accent Background */
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary-slate) 0%, #2D4242 100%);
+            color: #FFFFFF;
+            padding: 40px;
+            position: relative;
+            border-bottom: 5px solid var(--accent-terracotta);
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
+
+        .header-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(194, 65, 12, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .header-banner h1 {
+            font-family: 'Rubik', sans-serif;
+            font-size: 32px;
+            margin: 0 0 15px 0;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .header-banner p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background-color: var(--progress-bg);
+            height: 8px;
+            width: 100%;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .progress-bar {
+            background-color: var(--accent-terracotta);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Form Area & Step System */
+        .form-content {
+            padding: 40px;
+        }
+
+        .step-section {
+            display: none;
+        }
+
+        .step-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            border-bottom: 2px solid var(--card-border);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .section-header h2 {
+            font-family: 'Rubik', sans-serif;
+            font-size: 24px;
+            color: var(--primary-slate);
+            margin: 0;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .question-title {
+            font-family: 'Rubik', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 16px 0;
+            color: var(--primary-slate);
+            line-height: 1.4;
+        }
+
+        .question-explanation {
+            font-size: 14px;
+            color: var(--secondary-gray);
+            margin-top: -12px;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        /* Custom Control Options */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            background-color: #FCFAF8;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .option-label:hover {
+            border-color: var(--accent-olive);
+            background-color: rgba(91, 110, 88, 0.04);
+        }
+
+        .option-label input[type="radio"],
+        .option-label input[type="checkbox"] {
+            margin-left: 12px;
+            margin-right: 0;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-terracotta);
+            cursor: pointer;
+        }
+
+        /* Custom input check styles */
+        .option-label.selected {
+            background-color: rgba(194, 65, 12, 0.05);
+            border-color: var(--accent-terracotta);
+            font-weight: 600;
+        }
+
+        /* Text Input & Area */
+        textarea.custom-textarea {
+            width: 100%;
+            height: 120px;
+            padding: 14px;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            font-family: 'Assistant', sans-serif;
+            font-size: 16px;
+            resize: vertical;
+            outline: none;
+            background: #FCFAF8;
+        }
+
+        textarea.custom-textarea:focus {
+            border-color: var(--accent-terracotta);
+            box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.15);
+            background: #FFFFFF;
+        }
+
+        /* Linear Scale Form Style */
+        .linear-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 500px;
+            margin: 20px auto;
+            gap: 10px;
+        }
+
+        .scale-endpoint-label {
+            font-size: 14px;
+            color: var(--secondary-gray);
+            max-width: 110px;
+            text-align: center;
+        }
+
+        .scale-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .scale-option-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .scale-option-box input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent-terracotta);
+            cursor: pointer;
+        }
+
+        .scale-option-box span {
+            font-size: 14px;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        /* Grid Matrix System (Questions 4, 18) */
+        .matrix-table-container {
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            min-width: 500px;
+        }
+
+        .matrix-table th, .matrix-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .matrix-table th {
+            font-weight: 600;
+            color: var(--primary-slate);
+            background-color: #F4EFEA;
+        }
+
+        .matrix-table td.row-title {
+            text-align: right;
+            font-weight: 600;
+            width: 35%;
+            font-size: 15px;
+        }
+
+        .matrix-table input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-terracotta);
+            cursor: pointer;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            border-top: 1px solid var(--card-border);
+            padding-top: 25px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-terracotta);
+            color: #FFFFFF;
+        }
+
+        .btn-primary:hover {
+            background-color: #A33306;
+        }
+
+        .btn-secondary {
+            background-color: #E6DFD5;
+            color: var(--primary-slate);
+        }
+
+        .btn-secondary:hover {
+            background-color: #D6CEC3;
+        }
+
+        /* Privacy Alert Block */
+        .privacy-alert {
+            background-color: rgba(91, 110, 88, 0.08);
+            border-right: 4px solid var(--accent-olive);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .privacy-alert strong {
+            color: var(--accent-olive);
+        }
+
+        /* Loading Overlay Style */
+        .loader-screen {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(194, 65, 12, 0.2);
+            border-top: 5px solid var(--accent-terracotta);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success & Review Screens */
+        .thank-you-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .thank-you-screen i {
+            font-size: 64px;
+            color: var(--accent-olive);
+            margin-bottom: 24px;
+        }
+
+        .thank-you-screen h2 {
+            font-family: 'Rubik', sans-serif;
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .thank-you-screen p {
+            font-size: 18px;
+            color: var(--secondary-gray);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .export-box {
+            background-color: #F4EFEA;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 30px;
+            text-align: right;
+        }
+
+        .export-box h3 {
+            font-family: 'Rubik', sans-serif;
+            margin-top: 0;
+            color: var(--primary-slate);
+        }
+
+        /* Cloud Setup UI in Page Footer */
+        .cloud-setup-footer {
+            background: #EAE3D8;
+            border-top: 1px solid var(--card-border);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--secondary-gray);
+        }
+
+        .cloud-setup-btn {
+            background: none;
+            border: 1px solid var(--secondary-gray);
+            color: var(--secondary-gray);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .cloud-setup-btn:hover {
+            background: var(--secondary-gray);
+            color: #FFF;
+        }
+
+        .cloud-config-modal {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .cloud-config-modal input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+            font-size: 13px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            outline: none;
+        }
+
+        .cloud-config-modal input:focus {
+            border-color: var(--accent-terracotta);
+        }
+
+        /* Custom Utility styles */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 flex flex-col justify-between">
+<body>
 
-    <!-- Top Navigation Bar -->
-    <header class="bg-white/80 backdrop-blur-md border-b border-emerald-100 sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3 space-x-reverse">
-                <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-emerald-200">
-                    ט
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold text-slate-900 leading-tight">קיבוץ טללים</h1>
-                    <p class="text-xs text-emerald-700 font-medium">חזון ואסטרטגיה כלכלית</p>
-                </div>
-            </div>
-            <div id="progress-text" class="text-sm font-semibold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
-                שלב 1 מתוך 4
-            </div>
-        </div>
+    <div class="wrapper">
         <!-- Progress Bar Indicator -->
-        <div class="w-full bg-slate-100 h-1.5 overflow-hidden">
-            <div id="progress-indicator" class="bg-gradient-to-r from-emerald-500 to-teal-600 h-full w-1/4 transition-all duration-500 ease-out"></div>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8">
-        
-        <!-- Welcome Screen (Step 0) -->
-        <div id="step-welcome" class="bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100 p-6 md:p-10 transition-all duration-300">
-            <div class="text-center max-w-2xl mx-auto">
-                <span class="text-5xl">🌾</span>
-                <h2 class="text-3xl font-extrabold text-slate-900 mt-4 mb-3">שאלון חזון ואסטרטגיה כלכלית</h2>
-                <p class="text-emerald-700 font-semibold mb-6 text-lg">מעצבים יחד את עתיד קיבוץ טללים</p>
-                
-                <div class="text-right space-y-4 text-slate-600 bg-slate-50 p-6 rounded-xl border border-slate-100 mb-8 leading-relaxed">
-                    <p class="font-semibold text-slate-800">חברות וחברים יקרים,</p>
-                    <p>
-                        קיבוץ טללים נמצא בתנופת צמיחה ועומד בפני החלטות אסטרטגיות משמעותיות בתחומי המשק, הקהילה והשיוך. 
-                        שאלון זה נועד למפות את עמדות הציבור, להגדיר את חזון הקהילה ולגבש סדרי עדיפויות להשקעות ופיתוח כלכלי.
-                    </p>
-                    <p class="text-sm text-amber-800 font-medium bg-amber-50 p-3 rounded-lg border border-amber-100">
-                        ⏱️ מילוי השאלון אורך כ-5-7 דקות. התשובות נשמרות באופן אוטומטי בענן בסיום התהליך.
-                    </p>
-                </div>
-
-                <button onclick="startQuestionnaire()" class="inline-flex items-center space-x-2 space-x-reverse bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg px-8 py-4 rounded-xl shadow-lg shadow-emerald-200 transition transform hover:-translate-y-0.5 active:translate-y-0 w-full md:w-auto justify-center">
-                    <span>מתחילים במילוי השאלון</span>
-                    <span>←</span>
-                </button>
-            </div>
+        <div class="progress-container">
+            <div id="progressBar" class="progress-bar"></div>
         </div>
 
-        <!-- Step 1: Personal Info -->
-        <div id="step-personal" class="hidden bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100 p-6 md:p-8 transition-all duration-300">
-            <h2 class="text-2xl font-bold text-slate-900 mb-2">שלב 1: פרטים כלליים</h2>
-            <p class="text-slate-500 mb-6 pb-4 border-b border-slate-100">אנא מלאו מספר פרטים כלליים שיסייעו לנו בפילוח נכון של העמדות.</p>
+        <!-- Banner Block -->
+        <div class="header-banner">
+            <h1>שאלון חזון כלכלי-אסטרטגי לקיבוץ טללים</h1>
+            <p>חברות וחברי טללים שלום,<br>הנהלת הקיבוץ ניגשת לגבש אסטרטגיה כלכלית לשנים הקרובות. מטרת השאלון היא להבין כיצד חברי טללים רואים את עתידו הכלכלי והעסקי של הקיבוץ, ומהי הצלחה כלכלית בעינינו כקהילה. התשובות יסייעו בגיבוש מדיניות השקעות, קביעת סדרי עדיפויות ובניית חזון כלכלי ארוך טווח.</p>
+        </div>
+
+        <form id="visionForm" onsubmit="event.preventDefault();" class="form-content">
             
-            <div class="space-y-6">
-                <!-- Name -->
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">שם מלא (אופציונלי):</label>
-                    <input type="text" id="input-name" placeholder="ישראל ישראלי" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none">
+            <!-- STEP 1: DEMOGRAPHICS -->
+            <div class="step-section active" id="step1">
+                <div class="section-header">
+                    <h2>מקטע 1 – קצת עליך</h2>
+                </div>
+                <div class="privacy-alert">
+                    <strong>הודעת פרטיות:</strong> השאלון מיועד לחברי קיבוץ טללים בלבד. השאלון אנונימי לחלוטין. אין איסוף כתובות דוא"ל או פרטים מזהים. כל התוצאות יוצגו במרוכז בלבד. אין שאלות חובה, אך נשמח למענה מלא ככל האפשר.
                 </div>
 
-                <!-- Age Group -->
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-3">קבוצת גיל: <span class="text-red-500">*</span></label>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <button type="button" onclick="selectOption('age', '18-30', this)" class="option-btn-age border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 py-3 px-4 rounded-xl text-center font-medium transition">18-30</button>
-                        <button type="button" onclick="selectOption('age', '31-45', this)" class="option-btn-age border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 py-3 px-4 rounded-xl text-center font-medium transition">31-45</button>
-                        <button type="button" onclick="selectOption('age', '46-60', this)" class="option-btn-age border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 py-3 px-4 rounded-xl text-center font-medium transition">46-60</button>
-                        <button type="button" onclick="selectOption('age', '60+', this)" class="option-btn-age border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 py-3 px-4 rounded-xl text-center font-medium transition">60+</button>
+                <!-- Q1 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 1: קבוצת גיל</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="radio" name="q1" value="עד 30"> עד 30</label>
+                        <label class="option-label"><input type="radio" name="q1" value="31–45"> 31–45</label>
+                        <label class="option-label"><input type="radio" name="q1" value="46–60"> 46–60</label>
+                        <label class="option-label"><input type="radio" name="q1" value="61–75"> 61–75</label>
+                        <label class="option-label"><input type="radio" name="q1" value="75+"> 75+</label>
                     </div>
                 </div>
 
-                <!-- Seniority -->
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-3">ותק בקיבוץ טללים: <span class="text-red-500">*</span></label>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <button type="button" onclick="selectOption('seniority', 'עד 5 שנים', this)" class="option-btn-seniority border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 py-3 px-4 rounded-xl text-center font-medium transition">עד 5 שנים</button>
-                        <button type="button" onclick="selectOption('seniority', '5 עד 15 שנים', this)" class="option-btn-seniority border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 py-3 px-4 rounded-xl text-center font-medium transition">5 עד 15 שנים</button>
-                        <button type="button" onclick="selectOption('seniority', 'מעל 15 שנים', this)" class="option-btn-seniority border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 py-3 px-4 rounded-xl text-center font-medium transition">מעל 15 שנים</button>
+                <!-- Q2 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 2: ותק ומעמד בקיבוץ</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="radio" name="q2" value="דור מייסד / ותיק"> דור מייסד / ותיק</label>
+                        <label class="option-label"><input type="radio" name="q2" value="דור שני או שלישי"> דור שני או שלישי</label>
+                        <label class="option-label"><input type="radio" name="q2" value="חבר/ה שהצטרף/ה בבגרות"> חבר/ה שהצטרף/ה בבגרות</label>
+                        <label class="option-label"><input type="radio" name="q2" value="מועמד/ת או תושב/ת בתהליך קליטה"> מועמד/ת או תושב/ת בתהליך קליטה</label>
+                        <label class="option-label"><input type="radio" name="q2" value="אחר"> אחר</label>
                     </div>
                 </div>
 
-                <!-- Sector/Status -->
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-3">מעמד בקיבוץ: <span class="text-red-500">*</span></label>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <button type="button" onclick="selectOption('status', 'חבר קיבוץ', this)" class="option-btn-status border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 py-3 px-4 rounded-xl text-center font-medium transition">חבר קיבוץ</button>
-                        <button type="button" onclick="selectOption('status', 'מועמד לחברות', this)" class="option-btn-status border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 py-3 px-4 rounded-xl text-center font-medium transition">מועמד לחברות</button>
-                        <button type="button" onclick="selectOption('status', 'תושב / שוכר', this)" class="option-btn-status border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 py-3 px-4 rounded-xl text-center font-medium transition">תושב / שוכר</button>
+                <!-- Q3 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 3: תעסוקה</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="radio" name="q3" value="עובד/ת בענפי הקיבוץ"> עובד/ת בענפי הקיבוץ</label>
+                        <label class="option-label"><input type="radio" name="q3" value="עובד/ת מחוץ לקיבוץ כשכיר/ה"> עובד/ת מחוץ לקיבוץ כשכיר/ה</label>
+                        <label class="option-label"><input type="radio" name="q3" value="עצמאי/ת או בעל/ת עסק"> עצמאי/ת או בעל/ת עסק</label>
+                        <label class="option-label"><input type="radio" name="q3" value="משלב/ת עבודה בקיבוץ ומחוצה לו"> משלב/ת עבודה בקיבוץ ומחוצה לו</label>
+                        <label class="option-label"><input type="radio" name="q3" value="סטודנט/ית / חייל/ת / שירות לאומי"> סטודנט/ית / חייל/ת / שירות לאומי</label>
+                        <label class="option-label"><input type="radio" name="q3" value="פנסיונר/ית"> פנסיונר/ית</label>
+                        <label class="option-label"><input type="radio" name="q3" value="לא מועסק/ת כיום"> לא מועסק/ת כיום</label>
+                        <label class="option-label"><input type="radio" name="q3" value="אחר"> אחר</label>
                     </div>
                 </div>
             </div>
 
-            <!-- Error message container -->
-            <div id="step-1-error" class="hidden mt-4 text-sm font-semibold text-red-600 bg-red-50 p-3 rounded-lg border border-red-100">
-                ⚠️ אנא מלאו את כל שדות החובה המסומנים בכוכבית (*).
-            </div>
+            <!-- STEP 2: VISION & PRIORITIES -->
+            <div class="step-section" id="step2">
+                <div class="section-header">
+                    <h2>מקטע 2 – חזון וסדרי עדיפויות</h2>
+                </div>
 
-            <!-- Nav Buttons -->
-            <div class="flex justify-between items-center mt-8 pt-6 border-t border-slate-100">
-                <div></div>
-                <button onclick="nextStep(2)" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition">המשך לשלב הבא ←</button>
-            </div>
-        </div>
+                <!-- Q4 Grid Matrix -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 4: מהי לדעתך המטרה המועדפת ביותר שהמגזר העסקי של הקיבוץ צריך לשרת? דרג לפי סדר עדיפיות.</p>
+                    <p class="question-explanation">1 = עדיפות הגבוהה ביותר | 5 = עדיפות נמוכה יותר</p>
+                    <div class="matrix-table-container">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>מטרה</th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="row-title">
+                                        הכנסה שוטפת לחברים עכשיו
+                                        <span style="display: block; font-size: 13px; font-weight: normal; color: var(--secondary-gray); margin-top: 4px;">(העלאת רמת חיים מיידית)</span>
+                                    </td>
+                                    <td><input type="radio" name="q4_r1" value="1"></td>
+                                    <td><input type="radio" name="q4_r1" value="2"></td>
+                                    <td><input type="radio" name="q4_r1" value="3"></td>
+                                    <td><input type="radio" name="q4_r1" value="4"></td>
+                                    <td><input type="radio" name="q4_r1" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">
+                                        צמיחת נכסים ותשואה לטווח ארוך
+                                        <span style="display: block; font-size: 13px; font-weight: normal; color: var(--secondary-gray); margin-top: 4px;">(הגדלת ההון של הקיבוץ לדורות הבאים)</span>
+                                    </td>
+                                    <td><input type="radio" name="q4_r2" value="1"></td>
+                                    <td><input type="radio" name="q4_r2" value="2"></td>
+                                    <td><input type="radio" name="q4_r2" value="3"></td>
+                                    <td><input type="radio" name="q4_r2" value="4"></td>
+                                    <td><input type="radio" name="q4_r2" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">
+                                        תעסוקה לחברים בתוך הקיבוץ והמשכיות דורית
+                                        <span style="display: block; font-size: 13px; font-weight: normal; color: var(--secondary-gray); margin-top: 4px;">(משיכת צעירים)</span>
+                                    </td>
+                                    <td><input type="radio" name="q4_r3" value="1"></td>
+                                    <td><input type="radio" name="q4_r3" value="2"></td>
+                                    <td><input type="radio" name="q4_r3" value="3"></td>
+                                    <td><input type="radio" name="q4_r3" value="4"></td>
+                                    <td><input type="radio" name="q4_r3" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">
+                                        שמירה על ההון וביטחון כלכלי
+                                        <span style="display: block; font-size: 13px; font-weight: normal; color: var(--secondary-gray); margin-top: 4px;">(סיכון נמוך, פנסיות בטוחות)</span>
+                                    </td>
+                                    <td><input type="radio" name="q4_r4" value="1"></td>
+                                    <td><input type="radio" name="q4_r4" value="2"></td>
+                                    <td><input type="radio" name="q4_r4" value="3"></td>
+                                    <td><input type="radio" name="q4_r4" value="4"></td>
+                                    <td><input type="radio" name="q4_r4" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">
+                                        העלאת רמת השירותים בקיבוץ
+                                        <span style="display: block; font-size: 13px; font-weight: normal; color: var(--secondary-gray); margin-top: 4px;">(חינוך, רווחה, תרבות, נראות)</span>
+                                    </td>
+                                    <td><input type="radio" name="q4_r5" value="1"></td>
+                                    <td><input type="radio" name="q4_r5" value="2"></td>
+                                    <td><input type="radio" name="q4_r5" value="3"></td>
+                                    <td><input type="radio" name="q4_r5" value="4"></td>
+                                    <td><input type="radio" name="q4_r5" value="5"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-        <!-- Step 2: Vision & Strategy -->
-        <div id="step-vision" class="hidden bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100 p-6 md:p-8 transition-all duration-300">
-            <h2 class="text-2xl font-bold text-slate-900 mb-2">שלב 2: תפיסות יסוד וחזון כלכלי</h2>
-            <p class="text-slate-500 mb-6 pb-4 border-b border-slate-100">עד כמה אתם מסכימים עם ההיגדים הבאים? (סקאלה של 1 עד 5, כאשר 5 פירושו מסכים לחלוטין)</p>
-            
-            <div class="space-y-8">
-                <!-- Likert Q1 -->
-                <div>
-                    <p class="font-bold text-slate-800 mb-3">1. על קיבוץ טללים לשמור על אופי כלכלי שיתופי-סוציאליסטי הדוק ודאגה לכלל חבריו באופן שווה.</p>
-                    <div class="flex justify-between items-center max-w-md gap-2">
-                        <span class="text-xs text-slate-400">לא מסכים בכלל (1)</span>
-                        <div class="flex gap-2">
-                            <button type="button" onclick="selectLikert('likert1', 1, this)" class="likert-btn-1 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">1</button>
-                            <button type="button" onclick="selectLikert('likert1', 2, this)" class="likert-btn-1 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">2</button>
-                            <button type="button" onclick="selectLikert('likert1', 3, this)" class="likert-btn-1 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">3</button>
-                            <button type="button" onclick="selectLikert('likert1', 4, this)" class="likert-btn-1 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">4</button>
-                            <button type="button" onclick="selectLikert('likert1', 5, this)" class="likert-btn-1 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">5</button>
+                <!-- Q5 Grid Matrix -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 5: מהם הדברים שחשוב ביותר לשמר בטללים בעשור הקרוב? דרג/י לפי סדר עדיפויות.</p>
+                    <p class="question-explanation">1 = עדיפות הגבוהה ביותר לשימור | 5 = עדיפות נמוכה יותר</p>
+                    <div class="matrix-table-container">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>נושא לשימור</th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="row-title">הקהילה והערבות ההדדית</td>
+                                    <td><input type="radio" name="q5_r1" value="1"></td>
+                                    <td><input type="radio" name="q5_r1" value="2"></td>
+                                    <td><input type="radio" name="q5_r1" value="3"></td>
+                                    <td><input type="radio" name="q5_r1" value="4"></td>
+                                    <td><input type="radio" name="q5_r1" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">הביטחון הכלכלי</td>
+                                    <td><input type="radio" name="q5_r2" value="1"></td>
+                                    <td><input type="radio" name="q5_r2" value="2"></td>
+                                    <td><input type="radio" name="q5_r2" value="3"></td>
+                                    <td><input type="radio" name="q5_r2" value="4"></td>
+                                    <td><input type="radio" name="q5_r2" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">האופי הכפרי</td>
+                                    <td><input type="radio" name="q5_r3" value="1"></td>
+                                    <td><input type="radio" name="q5_r3" value="2"></td>
+                                    <td><input type="radio" name="q5_r3" value="3"></td>
+                                    <td><input type="radio" name="q5_r3" value="4"></td>
+                                    <td><input type="radio" name="q5_r3" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">השטחים הפתוחים והסביבה</td>
+                                    <td><input type="radio" name="q5_r4" value="1"></td>
+                                    <td><input type="radio" name="q5_r4" value="2"></td>
+                                    <td><input type="radio" name="q5_r4" value="3"></td>
+                                    <td><input type="radio" name="q5_r4" value="4"></td>
+                                    <td><input type="radio" name="q5_r4" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">משיכת צעירים ומשפחות</td>
+                                    <td><input type="radio" name="q5_r5" value="1"></td>
+                                    <td><input type="radio" name="q5_r5" value="2"></td>
+                                    <td><input type="radio" name="q5_r5" value="3"></td>
+                                    <td><input type="radio" name="q5_r5" value="4"></td>
+                                    <td><input type="radio" name="q5_r5" value="5"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Q6 Grid Matrix -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 6: מהו השינוי החשוב ביותר שהיית רוצה לראות בטללים בעשר השנים הקרובות? דרג/י לפי סדר עדיפויות.</p>
+                    <p class="question-explanation">1 = עדיפות הגבוהה ביותר לשינוי | 5 = עדיפות נמוכה יותר</p>
+                    <div class="matrix-table-container">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>שינוי מבוקש</th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="row-title">יותר מקורות הכנסה</td>
+                                    <td><input type="radio" name="q6_r1" value="1"></td>
+                                    <td><input type="radio" name="q6_r1" value="2"></td>
+                                    <td><input type="radio" name="q6_r1" value="3"></td>
+                                    <td><input type="radio" name="q6_r1" value="4"></td>
+                                    <td><input type="radio" name="q6_r1" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">יותר מקומות עבודה</td>
+                                    <td><input type="radio" name="q6_r2" value="1"></td>
+                                    <td><input type="radio" name="q6_r2" value="2"></td>
+                                    <td><input type="radio" name="q6_r2" value="3"></td>
+                                    <td><input type="radio" name="q6_r2" value="4"></td>
+                                    <td><input type="radio" name="q6_r2" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">יותר משפחות צעירות</td>
+                                    <td><input type="radio" name="q6_r3" value="1"></td>
+                                    <td><input type="radio" name="q6_r3" value="2"></td>
+                                    <td><input type="radio" name="q6_r3" value="3"></td>
+                                    <td><input type="radio" name="q6_r3" value="4"></td>
+                                    <td><input type="radio" name="q6_r3" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">יותר שירותים קהילתיים</td>
+                                    <td><input type="radio" name="q6_r4" value="1"></td>
+                                    <td><input type="radio" name="q6_r4" value="2"></td>
+                                    <td><input type="radio" name="q6_r4" value="3"></td>
+                                    <td><input type="radio" name="q6_r4" value="4"></td>
+                                    <td><input type="radio" name="q6_r4" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">יותר יוזמות וחדשנות</td>
+                                    <td><input type="radio" name="q6_r5" value="1"></td>
+                                    <td><input type="radio" name="q6_r5" value="2"></td>
+                                    <td><input type="radio" name="q6_r5" value="3"></td>
+                                    <td><input type="radio" name="q6_r5" value="4"></td>
+                                    <td><input type="radio" name="q6_r5" value="5"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 7: עד כמה חשוב לשמר את השטחים הפתוחים והאופי הכפרי גם במחיר של ויתור על רווחים כלכליים גבוהים יותר?</p>
+                    <div class="linear-scale">
+                        <span class="scale-endpoint-label">לא חשוב</span>
+                        <div class="scale-options">
+                            <label class="scale-option-box"><input type="radio" name="q7" value="1"><span>1</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q7" value="2"><span>2</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q7" value="3"><span>3</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q7" value="4"><span>4</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q7" value="5"><span>5</span></label>
                         </div>
-                        <span class="text-xs text-emerald-700 font-bold">מסכים לחלוטין (5)</span>
+                        <span class="scale-endpoint-label">קו אדום שאינו נתון לפשרה</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: INVESTMENTS & LEVERAGE -->
+            <div class="step-section" id="step3">
+                <div class="section-header">
+                    <h2>מקטע 3 – השקעות, סיכון ומינוף</h2>
+                </div>
+
+                <!-- Q8 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 8: לאיזה אופק זמן נכון לכוון את השקעות הקיבוץ?</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="radio" name="q8" value="החזר תזרימי מהיר (1–5 שנים) – דגש על הכנסות לכאן ועכשיו."> החזר תזרימי מהיר (1–5 שנים) – דגש על הכנסות לכאן ועכשיו.</label>
+                        <label class="option-label"><input type="radio" name="q8" value="בנייה לטווח בינוני (5–10 שנים) – שילוב מאוזן."> בנייה לטווח בינוני (5–10 שנים) – שילוב מאוזן.</label>
+                        <label class="option-label"><input type="radio" name="q8" value="נכס בין-דורי (10+ שנים) – משקיעים היום בשביל הדור הבא, גם אם הרווח מאוחר."> נכס בין-דורי (10+ שנים) – משקיעים היום בשביל הדור הבא, גם אם הרווח מאוחר.</label>
                     </div>
                 </div>
 
-                <!-- Likert Q2 -->
-                <div class="pt-4 border-t border-slate-50">
-                    <p class="font-bold text-slate-800 mb-3">2. פיתוח עסקי ויזמות פרטית של חברים בתוך הקיבוץ הם מנועי צמיחה הכרחיים ויש לעודד אותם.</p>
-                    <div class="flex justify-between items-center max-w-md gap-2">
-                        <span class="text-xs text-slate-400">לא מסכים בכלל (1)</span>
-                        <div class="flex gap-2">
-                            <button type="button" onclick="selectLikert('likert2', 1, this)" class="likert-btn-2 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">1</button>
-                            <button type="button" onclick="selectLikert('likert2', 2, this)" class="likert-btn-2 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">2</button>
-                            <button type="button" onclick="selectLikert('likert2', 3, this)" class="likert-btn-2 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">3</button>
-                            <button type="button" onclick="selectLikert('likert2', 4, this)" class="likert-btn-2 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">4</button>
-                            <button type="button" onclick="selectLikert('likert2', 5, this)" class="likert-btn-2 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">5</button>
+                <!-- Q9 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 9: לדעתך, מהי רמת הסיכון העסקי המתאימה לטללים כיום?</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="radio" name="q9" value="שמרנית / נמוכה מאוד — קודם כל לשמור על מה ששיש."> שמרנית / נמוכה מאוד — קודם כל לשמור על מה ששיש.</label>
+                        <label class="option-label"><input type="radio" name="q9" value="נמוכה — מוכנות לסיכון קטן ומבוקר מאוד."> נמוכה — מוכנות לסיכון קטן ומבוקר מאוד.</label>
+                        <label class="option-label"><input type="radio" name="q9" value="מאוזנת / בינונית — מוכנים לקחת סיכון מחושב ומפוזר."> מאוזנת / בינונית — מוכנים לקחת סיכון מחושב ומפוזר.</label>
+                        <label class="option-label"><input type="radio" name="q9" value="יזמית / גבוהה — מוכנים לקחת סיכון משמעותי בשביל פוטנציאל לצמיחה גבוהה."> יזמית / גבוהה — מוכנים לקחת סיכון משמעותי בשביל פוטנציאל לצמיחה גבוהה.</label>
+                    </div>
+                </div>
+
+                <!-- Q10 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 10: עד כמה את/ה מסכים/ה עם האמירה: "עדיף לוותר על הזדמנות טובה מאשר לסכן את יציבות הקיבוץ"</p>
+                    <div class="linear-scale">
+                        <span class="scale-endpoint-label">כלל לא מסכים</span>
+                        <div class="scale-options">
+                            <label class="scale-option-box"><input type="radio" name="q10" value="1"><span>1</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q10" value="2"><span>2</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q10" value="3"><span>3</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q10" value="4"><span>4</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q10" value="5"><span>5</span></label>
                         </div>
-                        <span class="text-xs text-emerald-700 font-bold">מסכים לחלוטין (5)</span>
+                        <span class="scale-endpoint-label">מסכים מאוד</span>
                     </div>
                 </div>
 
-                <!-- Likert Q3 -->
-                <div class="pt-4 border-t border-slate-50">
-                    <p class="font-bold text-slate-800 mb-3">3. תהליך שיוך נכסים (דירות ומגרשים) לחברים הוא צעד קריטי שיש להאיץ ולקדם בהקדם האפשרי.</p>
-                    <div class="flex justify-between items-center max-w-md gap-2">
-                        <span class="text-xs text-slate-400">לא מסכים בכלל (1)</span>
-                        <div class="flex gap-2">
-                            <button type="button" onclick="selectLikert('likert3', 1, this)" class="likert-btn-3 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">1</button>
-                            <button type="button" onclick="selectLikert('likert3', 2, this)" class="likert-btn-3 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">2</button>
-                            <button type="button" onclick="selectLikert('likert3', 3, this)" class="likert-btn-3 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">3</button>
-                            <button type="button" onclick="selectLikert('likert3', 4, this)" class="likert-btn-3 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">4</button>
-                            <button type="button" onclick="selectLikert('likert3', 5, this)" class="likert-btn-3 w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center font-bold hover:bg-slate-50 transition">5</button>
+                <!-- Q11 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 11: מה צריכה להיות גישת הקיבוץ להלוואות ולמינוף?</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="radio" name="q11" value="להשקיע רק מהון עצמי קיים, להימנע מהלוואות ככל האפשר."> להשקיע רק מהון עצמי קיים, להימנע מהלוואות ככל האפשר.</label>
+                        <label class="option-label"><input type="radio" name="q11" value="מינוף מתון — הלוואות מתונות ומחושבות, רק להשקעות שיוצרות הכנסה ברורה."> מינוף מתון — הלוואות מתונות ומחושבות, רק להשקעות שיוצרות הכנסה ברורה.</label>
+                        <label class="option-label"><input type="radio" name="q11" value="מינוף משמעותי — מוכנים לקחת הלוואות גדולות בשביל הזדמנויות טובות, באישור רחב של הקהילה."> מינוף משמעותי — מוכנים לקחת הלוואות גדולות בשביל הזדמנויות טובות, באישור רחב של הקהילה.</label>
+                    </div>
+                </div>
+
+                <!-- Q12 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 12: חלוקת רווחים מול השקעה מחדש: כאשר יש לקיבוץ רווחים משמעותיים (לאחר הפרשות חובה ופנסיות), מה נכון לעשות כברירת מחדל?</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="radio" name="q12" value="להשקיע את רובם מחדש בעתיד הקיבוץ (70% השקעה / 30% חלוקה)."> להשקיע את רובם מחדש בעתיד הקיבוץ (70% השקעה / 30% חלוקה).</label>
+                        <label class="option-label"><input type="radio" name="q12" value="לחלק חלק לחברים ולהשקיע חלק באופן שווה (50% השקעה / 50% חלוקה)."> לחלק חלק לחברים ולהשקיע חלק באופן שווה (50% השקעה / 50% חלוקה).</label>
+                        <label class="option-label"><input type="radio" name="q12" value="לחלק את רוב הכסף כתוספת לחברים (30% השקעה / 70% חלוקה)."> לחלק את רוב הכסף כתוספת לחברים (30% השקעה / 70% חלוקה).</label>
+                        <label class="option-label"><input type="radio" name="q12" value="להחליט כל שנה מחדש, לא לקבוע יחס קבוע."> להחליט כל שנה מחדש, לא לקבוע יחס קבוע.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4: ENTERPRISE & MANAGEMENT -->
+            <div class="step-section" id="step4">
+                <div class="section-header">
+                    <h2>מקטע 4 – יזמות וניהול</h2>
+                </div>
+
+                <!-- Q13 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 13: שאלת תרחיש ("עמלה או עמל") - יש לקיבוץ שטח והון להשקעה. איזה משני המסלולים הבאים תעדיף/י?</p>
+                    <div class="options-list">
+                        <label class="option-label">
+                            <input type="radio" name="q13" value="מסלול א' ('עמלה' - נכס מניב): השכרת הקרקע למפעיל חיצוני. תשואה יציבה, סיכון נמוך ופחות מורכבות, אך ללא מעורבות חברים.">
+                            <div>
+                                <strong>מסלול א' ("עמלה" - נכס מניב):</strong> השכרת הקרקע למפעיל חיצוני (למשל סולארי / מתחם אחסון). תשואה יציבה, סיכון נמוך ופחות מורכבות ניהולית, אך כמעט ללא מקומות עבודה או מעורבות ישירה של חברים.
+                            </div>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="q13" value="מסלול ב' ('עמל' - יזמות והפעלה עצמית): מיזם בניהול והפעלה של הקיבוץ. סיכון גבוה יותר וניהול מורכב, אך מייצר תעסוקה ומעורבות.">
+                            <div>
+                                <strong>מסלול ב' ("עמל" - יזמות והפעלה עצמית):</strong> מיזם בניהול והפעלה של הקיבוץ (למשל חקלאות מתקדמת / תיירות). פוטנציאל תשואה דומה, סיכון גבוה יותר וניהול מורכב, אך מייצר תעסוקה לחברים, גאווה מקומית ומעורבות קהילתית.
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q14 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 14: בניהול מיזם חדש, מה הגישה המועדפת עליך?</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="radio" name="q14" value="שותפות עם גורם חיצוני שמביא הון וניהול מקצועי (פחות שליטה שלנו, פחות סיכון)."> שותפות עם גורם חיצוני שמביא הון וניהול מקצועי (פחות שליטה שלנו, פחות סיכון).</label>
+                        <label class="option-label"><input type="radio" name="q14" value="הפעלה עצמאית לחלוטין של הקיבוץ (יותר שליטה ותעסוקה לנו, אך יותר סיכון ואחריות)."> הפעלה עצמאית לחלוטין של הקיבוץ (יותר שליטה ותעסוקה לנו, אך יותר סיכון ואחריות).</label>
+                        <label class="option-label"><input type="radio" name="q14" value="תלוי במיזם — אין לי העדפה גורפת."> תלוי במיזם — אין לי העדפה גורפת.</label>
+                    </div>
+                </div>
+
+                <!-- Q15 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 15: עד כמה לדעתך קיימת כיום בטללים יכולת ניהולית להרחיב פעילות עסקית באופן עצמאי?</p>
+                    <div class="linear-scale">
+                        <span class="scale-endpoint-label">אין יכולת מספקת</span>
+                        <div class="scale-options">
+                            <label class="scale-option-box"><input type="radio" name="q15" value="1"><span>1</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q15" value="2"><span>2</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q15" value="3"><span>3</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q15" value="4"><span>4</span></label>
+                            <label class="scale-option-box"><input type="radio" name="q15" value="5"><span>5</span></label>
                         </div>
-                        <span class="text-xs text-emerald-700 font-bold">מסכים לחלוטין (5)</span>
+                        <span class="scale-endpoint-label">יכולת גבוהה מאוד</span>
+                    </div>
+                </div>
+
+                <!-- Q16 (Multi-select) -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 16: מה צריך לחזק לפני כניסה להשקעות גדולות?</p>
+                    <p class="question-explanation">ניתן לבחור מספר אפשרויות</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="checkbox" name="q16" value="ועדת השקעות מקצועית"> ועדת השקעות מקצועית</label>
+                        <label class="option-label"><input type="checkbox" name="q16" value="ייעוץ כלכלי חיצוני"> ייעוץ כלכלי חיצוני</label>
+                        <label class="option-label"><input type="checkbox" name="q16" value="מנהל/ת פיתוח עסקי"> מנהל/ת פיתוח עסקי</label>
+                        <label class="option-label"><input type="checkbox" name="q16" value="כלי בקרה ומדידה"> כלי בקרה ומדידה</label>
+                        <label class="option-label"><input type="checkbox" name="q16" value="אחר" id="q16_other_chk"> אחר</label>
                     </div>
                 </div>
             </div>
 
-            <!-- Error message container -->
-            <div id="step-2-error" class="hidden mt-6 text-sm font-semibold text-red-600 bg-red-50 p-3 rounded-lg border border-red-100">
-                ⚠️ אנא ענו על כל השאלות בשלב זה לפני שתמשיכו.
+            <!-- STEP 5: RED LINES & SECTORS -->
+            <div class="step-section" id="step5">
+                <div class="section-header">
+                    <h2>מקטע 5 – קווים אדומים ותחומי השקעה</h2>
+                </div>
+
+                <!-- Q17 (Multi-select) -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 17: באילו מקרים הקיבוץ לא צריך להשקיע גם אם הרווח הצפוי גבוה?</p>
+                    <p class="question-explanation">ניתן לבחור מספר אפשרויות</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="checkbox" name="q17" value="פעילות הפוגעת בסביבה"> פעילות הפוגעת בסביבה</label>
+                        <label class="option-label"><input type="checkbox" name="q17" value="פעילות שאינה תואמת את ערכי הקיבוץ"> פעילות שאינה תואמת את ערכי הקיבוץ</label>
+                        <label class="option-label"><input type="checkbox" name="q17" value="סיכון ליציבות הפיננסית או הפנסיונית"> סיכון ליציבות הפיננסית או הפנסיונית</label>
+                        <label class="option-label"><input type="checkbox" name="q17" value="מינוף גבוה מאוד"> מינוף גבוה מאוד</label>
+                        <label class="option-label"><input type="checkbox" name="q17" value="השקעה ללא יכולת פיקוח"> השקעה ללא יכולת פיקוח</label>
+                        <label class="option-label"><input type="checkbox" name="q17" value="אין תחומים פסולים מראש"> אין תחומים פסולים מראש</label>
+                        <label class="option-label"><input type="checkbox" name="q17" value="אחר"> אחר</label>
+                    </div>
+                </div>
+
+                <!-- Q18 Grid Matrix -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 18: עד כמה התחומים הבאים מתאימים לעתיד הכלכלי של טללים?</p>
+                    <p class="question-explanation">1 = לא מתאים כלל | 5 = מתאים מאוד</p>
+                    <div class="matrix-table-container">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>תחום השקעה</th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="row-title">אנרגיה מתחדשת ואגירה</td>
+                                    <td><input type="radio" name="q18_r1" value="1"></td>
+                                    <td><input type="radio" name="q18_r1" value="2"></td>
+                                    <td><input type="radio" name="q18_r1" value="3"></td>
+                                    <td><input type="radio" name="q18_r1" value="4"></td>
+                                    <td><input type="radio" name="q18_r1" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">נדל"ן מניב ומסחר</td>
+                                    <td><input type="radio" name="q18_r2" value="1"></td>
+                                    <td><input type="radio" name="q18_r2" value="2"></td>
+                                    <td><input type="radio" name="q18_r2" value="3"></td>
+                                    <td><input type="radio" name="q18_r2" value="4"></td>
+                                    <td><input type="radio" name="q18_r2" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">חקלאות מתקדמת</td>
+                                    <td><input type="radio" name="q18_r3" value="1"></td>
+                                    <td><input type="radio" name="q18_r3" value="2"></td>
+                                    <td><input type="radio" name="q18_r3" value="3"></td>
+                                    <td><input type="radio" name="q18_r3" value="4"></td>
+                                    <td><input type="radio" name="q18_r3" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">תיירות מדברית</td>
+                                    <td><input type="radio" name="q18_r4" value="1"></td>
+                                    <td><input type="radio" name="q18_r4" value="2"></td>
+                                    <td><input type="radio" name="q18_r4" value="3"></td>
+                                    <td><input type="radio" name="q18_r4" value="4"></td>
+                                    <td><input type="radio" name="q18_r4" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">עסקים קהילתיים</td>
+                                    <td><input type="radio" name="q18_r5" value="1"></td>
+                                    <td><input type="radio" name="q18_r5" value="2"></td>
+                                    <td><input type="radio" name="q18_r5" value="3"></td>
+                                    <td><input type="radio" name="q18_r5" value="4"></td>
+                                    <td><input type="radio" name="q18_r5" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">השקעות פיננסיות סולידיות</td>
+                                    <td><input type="radio" name="q18_r6" value="1"></td>
+                                    <td><input type="radio" name="q18_r6" value="2"></td>
+                                    <td><input type="radio" name="q18_r6" value="3"></td>
+                                    <td><input type="radio" name="q18_r6" value="4"></td>
+                                    <td><input type="radio" name="q18_r6" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">אחסנה פתוחה</td>
+                                    <td><input type="radio" name="q18_r7" value="1"></td>
+                                    <td><input type="radio" name="q18_r7" value="2"></td>
+                                    <td><input type="radio" name="q18_r7" value="3"></td>
+                                    <td><input type="radio" name="q18_r7" value="4"></td>
+                                    <td><input type="radio" name="q18_r7" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-title">מפעלי תעשייה</td>
+                                    <td><input type="radio" name="q18_r8" value="1"></td>
+                                    <td><input type="radio" name="q18_r8" value="2"></td>
+                                    <td><input type="radio" name="q18_r8" value="3"></td>
+                                    <td><input type="radio" name="q18_r8" value="4"></td>
+                                    <td><input type="radio" name="q18_r8" value="5"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <!-- Nav Buttons -->
-            <div class="flex justify-between items-center mt-8 pt-6 border-t border-slate-100">
-                <button onclick="nextStep(1)" class="text-slate-500 hover:text-slate-800 font-bold py-2 px-4 transition">→ חזרה</button>
-                <button onclick="nextStep(3)" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition">המשך לשלב הבא ←</button>
+            <!-- STEP 6: WRAP-UP OPEN QUESTIONS -->
+            <div class="step-section" id="step6">
+                <div class="section-header">
+                    <h2>מקטע 6 – שאלות מסכמות</h2>
+                </div>
+
+                <!-- Q19 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 19: איזה מודל משקף את החזון שלך לטללים?</p>
+                    <div class="options-list">
+                        <label class="option-label"><input type="radio" name="q19" value="קיבוץ יציב ושמרני"> קיבוץ יציב ושמרני (דגש על ביטחון סוציאלי ושימור הקיים)</label>
+                        <label class="option-label"><input type="radio" name="q19" value="קיבוץ מאוזן"> קיבוץ מאוזן (שילוב של פיתוח מתון עם בקרת סיכונים)</label>
+                        <label class="option-label"><input type="radio" name="q19" value="קיבוץ יזמי ומוביל"> קיבוץ יזמי ומוביל (שאיפה לצמיחה מואצת ויוזמות עסקיות רחבות)</label>
+                        <label class="option-label"><input type="radio" name="q19" value="לא יודע/ת"> לא יודע/ת</label>
+                    </div>
+                </div>
+
+                <!-- Q20 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 20: מהו לדעתך הסיכון הגדול ביותר לעתיד הכלכלי של טללים?</p>
+                    <textarea class="custom-textarea" name="q20" placeholder="הקש את תשובתך כאן..."></textarea>
+                </div>
+
+                <!-- Q21 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 21: מהי ההזדמנות הגדולה ביותר או רעיון עסקי שכדאי לקיבוץ לבחון?</p>
+                    <textarea class="custom-textarea" name="q21" placeholder="הקש את תשובתך כאן..."></textarea>
+                </div>
+
+                <!-- Q22 -->
+                <div class="question-card">
+                    <p class="question-title">שאלה 22: אם נביט לאחור בעוד 10–15 שנים, איזה קיבוץ היית רוצה לראות כאן בעקבות ההחלטות שנקבל היום?</p>
+                    <textarea class="custom-textarea" name="q22" placeholder="הקש את תשובתך כאן..."></textarea>
+                </div>
             </div>
+
+            <!-- LOADING SCREEN DURING SEND -->
+            <div class="step-section" id="stepLoading">
+                <div class="loader-screen">
+                    <div class="spinner"></div>
+                    <h2>שולח את תשובותיך לענן...</h2>
+                    <p>אנא המתן/י שניות בודדות, התשובות נרשמות כעת ישירות בגיליון האקסל הכללי.</p>
+                </div>
+            </div>
+
+            <!-- SUCCESS THANK YOU SCREEN -->
+            <div class="step-section" id="stepSuccess">
+                <div class="thank-you-screen">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <h2>תודה רבה על השתתפותך!</h2>
+                    <p id="successMessage">תשובתך נקלטה בהצלחה ותסייע רבות בגיבוש החזון והמדיניות הכלכלית של קיבוץ טללים לשנים הבאות.</p>
+                    
+                    <div class="export-box">
+                        <h3>גיבוי / הורדת נתוני המענה שלך</h3>
+                        <p>באפשרותך להוריד תמיד קובץ אקסל מקומי המכיל את הבחירות שסימנת בשאלון זה.</p>
+                        <div style="display: flex; gap:12px; justify-content: flex-start; margin-top: 15px;">
+                            <button type="button" class="btn btn-primary" onclick="downloadCSV()"><i class="fa-solid fa-file-csv"></i> הורדה כקובץ Excel / CSV</button>
+                            <button type="button" class="btn btn-secondary" onclick="copyToClipboard()"><i class="fa-solid fa-copy"></i> העתקת תשובות ללוח</button>
+                        </div>
+                        <div id="copyAlert" style="margin-top: 10px; color: var(--accent-olive); font-weight: bold;" class="hidden">✓ התשובות הועתקו ללוח בהצלחה!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Bar -->
+            <div class="nav-buttons" id="navContainer">
+                <button type="button" id="btnPrev" class="btn btn-secondary" onclick="moveStep(-1)"><i class="fa-solid fa-arrow-right"></i> הקודם</button>
+                <button type="button" id="btnNext" class="btn btn-primary" onclick="moveStep(1)">הבא <i class="fa-solid fa-arrow-left"></i></button>
+            </div>
+        </form>
+
+        <!-- Configuration Panel for Admin -->
+        <div class="cloud-setup-footer" id="setupFooter">
+            <span>ממשק חיבור לגיליון גוגל (לא למילוי החברים)</span>
+            <button type="button" class="cloud-setup-btn" onclick="toggleConfigPanel()"><i class="fa-solid fa-gear"></i> הגדרת חיבור אקסל</button>
         </div>
 
-        <!-- Step 3: Investment Priorities -->
-        <div id="step-investment" class="hidden bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100 p-6 md:p-8 transition-all duration-300">
-            <h2 class="text-2xl font-bold text-slate-900 mb-2">שלב 3: סדרי עדיפויות השקעה</h2>
-            <p class="text-slate-500 mb-6 pb-4 border-b border-slate-100">אנא דרגו את סדרי העדיפויות שלכם להקצאת תקציבי הפיתוח של הקיבוץ בשנים הקרובות.</p>
-            
-            <div class="space-y-6">
-                <!-- Priority Slider 1: Agriculture & Industry -->
-                <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="font-bold text-slate-800">🚜 פיתוח חקלאות, אנרגיה סולארית ותעשייה משקית:</label>
-                        <span id="val-inv1" class="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full text-sm">50%</span>
-                    </div>
-                    <input type="range" min="0" max="100" value="50" step="10" oninput="updateSlider('inv1', this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
-                </div>
-
-                <!-- Priority Slider 2: Community & Education -->
-                <div class="pt-4 border-t border-slate-50">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="font-bold text-slate-800">🏡 השקעה במבני קהילה, חינוך ותרבות:</label>
-                        <span id="val-inv2" class="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full text-sm">50%</span>
-                    </div>
-                    <input type="range" min="0" max="100" value="50" step="10" oninput="updateSlider('inv2', this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
-                </div>
-
-                <!-- Priority Slider 3: Infrastructure & Expansion -->
-                <div class="pt-4 border-t border-slate-50">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="font-bold text-slate-800">🏗️ פיתוח תשתיות, הרחבה קהילתית וכבישים:</label>
-                        <span id="val-inv3" class="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full text-sm">50%</span>
-                    </div>
-                    <input type="range" min="0" max="100" value="50" step="10" oninput="updateSlider('inv3', this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
-                </div>
-
-                <!-- Open Text Comments -->
-                <div class="pt-6 border-t border-slate-100">
-                    <label class="block text-sm font-bold text-slate-700 mb-2">הערות, הצעות או דגשים מיוחדים שלכם לחזון הכלכלי (אופציונלי):</label>
-                    <textarea id="input-comments" rows="3" placeholder="כתבו כאן את תפיסתכם או דברים נוספים שחשוב שנכיר..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition outline-none resize-none"></textarea>
-                </div>
-            </div>
-
-            <!-- Nav Buttons -->
-            <div class="flex justify-between items-center mt-8 pt-6 border-t border-slate-100">
-                <button onclick="nextStep(2)" class="text-slate-500 hover:text-slate-800 font-bold py-2 px-4 transition">→ חזרה</button>
-                <button onclick="nextStep(4)" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition">מעבר לסיכום ושליחה ←</button>
-            </div>
+        <div id="configPanel" class="cloud-config-modal hidden" style="margin: 20px 40px;">
+            <h4 style="margin-top: 0; color: var(--accent-terracotta);">הגדרת שליחת נתונים לענן (Google Sheets)</h4>
+            <p style="margin: 5px 0; font-size: 13px;">הדבק כאן את כתובת ה-Web App של Google Script שקיבלת מהמדריך:</p>
+            <input type="text" id="sheetUrlInput" placeholder="https://script.google.com/macros/s/.../exec" oninput="saveScriptUrl()">
+            <small style="color: var(--accent-olive); display: block; margin-top: 5px;">✓ הכתובת נשמרת אוטומטית בדפדפן זה.</small>
         </div>
-
-        <!-- Step 4: Summary & Submission (THE KEY TROUBLESHOOTING SCREEN) -->
-        <div id="step-summary" class="hidden bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100 p-6 md:p-8 transition-all duration-300">
-            <h2 class="text-2xl font-bold text-slate-900 mb-2">שלב 4: סיכום התשובות ושליחה</h2>
-            <p class="text-slate-500 mb-6 pb-4 border-b border-slate-100">אנא עברו על הנתונים הבאים ושלחו אותם לגיליון הענן של הקיבוץ.</p>
-            
-            <!-- Quick Review Box -->
-            <div id="review-content" class="space-y-4 bg-slate-50 p-5 rounded-xl border border-slate-100 mb-8 text-sm leading-relaxed">
-                <!-- Will be dynamically filled via safe rendering -->
-            </div>
-
-            <!-- Status Indicator Panel -->
-            <div class="my-6 p-5 rounded-xl border transition-all duration-300" id="submission-status-box">
-                <div class="flex items-center space-x-3 space-x-reverse" id="status-spinner-container">
-                    <!-- Spinning circles -->
-                    <div class="animate-spin rounded-full h-8 w-8 border-4 border-emerald-500 border-t-transparent"></div>
-                    <div>
-                        <h3 class="font-bold text-slate-800" id="status-title">שולח את תשובותיך לענן באופן אוטומטי...</h3>
-                        <p class="text-xs text-slate-500 mt-1" id="status-subtitle">נא לא לסגור את העמוד, זה אורך מספר שניות.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Failsafe Actions: Hidden by default, shown if something goes wrong -->
-            <div id="failsafe-actions" class="hidden space-y-4 pt-6 border-t border-slate-100">
-                <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-xl p-4 text-sm">
-                    ⚠️ <strong>הבהרה לגבי השליחה:</strong> אם מסיבה כלשהי השליחה האוטומטית לא הצליחה או מתעכבת, באפשרותכם להוריד את קובץ הנתונים ישירות למחשב או להעתיק את התשובות ולשלוח אותן למרכז הקיבוץ בצורה ידנית.
-                </div>
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <button onclick="downloadCSV()" class="flex-1 inline-flex items-center justify-center space-x-2 space-x-reverse bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-5 rounded-xl transition shadow-sm">
-                        <span>📥 הורדת גיבוי מקומי (Excel/CSV)</span>
-                    </button>
-                    <button onclick="copyToClipboard()" class="flex-1 inline-flex items-center justify-center space-x-2 space-x-reverse bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 px-5 rounded-xl transition">
-                        <span>📋 העתקת נתונים ללוח (Copy)</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Admin/Developer Debug Console (Highly practical for monitoring script activity live) -->
-            <div class="mt-8 pt-4 border-t border-slate-100">
-                <button onclick="toggleDebugConsole()" class="text-xs text-slate-400 hover:text-slate-600 underline focus:outline-none">
-                    לוח ניפוי שגיאות למנהלים (Debug Console)
-                </button>
-                <div id="debug-console" class="hidden mt-3 p-3 bg-slate-900 rounded-lg text-[11px] font-mono text-emerald-400 max-h-40 overflow-y-auto custom-scrollbar">
-                    [System Initialized] - Waiting for action...
-                </div>
-            </div>
-
-            <!-- Back navigation button -->
-            <div class="flex justify-between items-center mt-8 pt-4 border-t border-slate-100" id="final-footer-nav">
-                <button onclick="nextStep(3)" id="summary-back-btn" class="text-slate-500 hover:text-slate-800 font-bold py-2 px-4 transition">→ חזרה ועריכה</button>
-                <button onclick="retrySubmission()" id="summary-retry-btn" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow-md transition">נסה לשלוח שוב 🔄</button>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Footer Credit -->
-    <footer class="bg-white border-t border-slate-100 py-4 text-center text-xs text-slate-400">
-        <div class="max-w-4xl mx-auto px-4">
-            שאלון חזון ואסטרטגיה כלכלית - קיבוץ טללים 2026 &copy; כל הזכויות שמורות לוועדת אסטרטגיה.
-        </div>
-    </footer>
+    </div>
 
     <!-- JS Logic -->
     <script>
-        // State Management
-        let currentStep = 0;
-        const formData = {
-            name: '',
-            age: '',
-            seniority: '',
-            status: '',
-            likert1: null,
-            likert2: null,
-            likert3: null,
-            inv1: 50,
-            inv2: 50,
-            inv3: 50,
-            comments: ''
-        };
+        let currentStep = 1;
+        const totalSteps = 6;
 
-        // Live Debugging logger
-        function logDebug(message) {
-            const consoleEl = document.getElementById('debug-console');
-            const timestamp = new Date().toISOString().split('T')[1].slice(0, 8);
-            consoleEl.innerHTML += `<br>[${timestamp}] ${message}`;
-            consoleEl.scrollTop = consoleEl.scrollHeight;
-            console.log(`[DEBUG] ${message}`);
-        }
-
-        function toggleDebugConsole() {
-            const consoleEl = document.getElementById('debug-console');
-            consoleEl.classList.toggle('hidden');
-        }
-
-        // Initialize state from potential localStorage to prevent progress loss
-        window.onload = function() {
-            logDebug("Window fully loaded. Checking local storage cache.");
-            try {
-                const cached = localStorage.getItem('tlalim_survey_cache');
-                if (cached) {
-                    const parsed = JSON.parse(cached);
-                    Object.assign(formData, parsed);
-                    logDebug("Cached data restored successfully.");
-                    // Restore visual buttons
-                    restoreVisualStates();
-                }
-            } catch (e) {
-                logDebug("Failed to load cache: " + e.message);
-            }
-        };
-
-        function saveCache() {
-            try {
-                localStorage.setItem('tlalim_survey_cache', JSON.stringify(formData));
-            } catch(e) {
-                logDebug("Failed to save cache: " + e.message);
-            }
-        }
-
-        function clearCache() {
-            try {
-                localStorage.removeItem('tlalim_survey_cache');
-                logDebug("Cache cleared.");
-            } catch(e) {
-                logDebug("Failed to clear cache: " + e.message);
-            }
-        }
-
-        function restoreVisualStates() {
-            document.getElementById('input-name').value = formData.name || '';
-            document.getElementById('input-comments').value = formData.comments || '';
-            
-            // Select age button
-            if (formData.age) {
-                const btns = document.querySelectorAll('.option-btn-age');
-                btns.forEach(btn => {
-                    if (btn.innerText.trim() === formData.age) {
-                        btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
+        // Sync option label visual styling on click
+        document.querySelectorAll('.option-label').forEach(label => {
+            const input = label.querySelector('input');
+            if (input) {
+                input.addEventListener('change', () => {
+                    if (input.type === 'radio') {
+                        // Clear siblings inside the same question-card
+                        const card = label.closest('.question-card');
+                        card.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    }
+                    if (input.checked) {
+                        label.classList.add('selected');
+                    } else {
+                        label.classList.remove('selected');
                     }
                 });
             }
+        });
 
-            // Select seniority button
-            if (formData.seniority) {
-                const btns = document.querySelectorAll('.option-btn-seniority');
-                btns.forEach(btn => {
-                    if (btn.innerText.trim() === formData.seniority) {
-                        btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
-                    }
-                });
+        // Initialize progress bar and load saved URL
+        updateProgress();
+        window.addEventListener('load', () => {
+            const savedUrl = localStorage.getItem('tlalim_sheets_script_url');
+            if (savedUrl) {
+                document.getElementById('sheetUrlInput').value = savedUrl;
             }
+        });
 
-            // Select status button
-            if (formData.status) {
-                const btns = document.querySelectorAll('.option-btn-status');
-                btns.forEach(btn => {
-                    if (btn.innerText.trim() === formData.status) {
-                        btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
-                    }
-                });
-            }
-
-            // Restore Likerts
-            if (formData.likert1) restoreLikertVisual('likert-btn-1', formData.likert1);
-            if (formData.likert2) restoreLikertVisual('likert-btn-2', formData.likert2);
-            if (formData.likert3) restoreLikertVisual('likert-btn-3', formData.likert3);
-
-            // Restore Sliders
-            updateSlider('inv1', formData.inv1);
-            updateSlider('inv2', formData.inv2);
-            updateSlider('inv3', formData.inv3);
+        function toggleConfigPanel() {
+            const panel = document.getElementById('configPanel');
+            panel.classList.toggle('hidden');
         }
 
-        function restoreLikertVisual(className, val) {
-            const btns = document.querySelectorAll('.' + className);
-            btns.forEach(btn => {
-                if (parseInt(btn.innerText) === val) {
-                    btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
-                }
-            });
+        function saveScriptUrl() {
+            const val = document.getElementById('sheetUrlInput').value.trim();
+            localStorage.setItem('tlalim_sheets_script_url', val);
         }
 
-        // Action Handlers
-        function startQuestionnaire() {
-            logDebug("Starting questionnaire.");
-            nextStep(1);
-        }
+        function moveStep(direction) {
+            // Validate limits
+            if (currentStep + direction < 1 || currentStep + direction > totalSteps + 1) return;
 
-        function selectOption(field, value, element) {
-            formData[field] = value;
-            logDebug(`Field chosen: ${field} = ${value}`);
-            saveCache();
+            // Hide current
+            document.getElementById(`step${currentStep}`).classList.remove('active');
 
-            // Clear previous selections in group
-            const groupClass = `.option-btn-${field}`;
-            document.querySelectorAll(groupClass).forEach(btn => {
-                btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-600');
-            });
+            // Change counter
+            currentStep += direction;
 
-            // Highlight selected
-            element.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
-        }
-
-        function selectLikert(field, value, element) {
-            formData[field] = value;
-            logDebug(`Likert chosen: ${field} = ${value}`);
-            saveCache();
-
-            // Get question specific class
-            let groupClass = '';
-            if (field === 'likert1') groupClass = '.likert-btn-1';
-            if (field === 'likert2') groupClass = '.likert-btn-2';
-            if (field === 'likert3') groupClass = '.likert-btn-3';
-
-            document.querySelectorAll(groupClass).forEach(btn => {
-                btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-600');
-            });
-
-            element.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
-        }
-
-        function updateSlider(field, value) {
-            formData[field] = parseInt(value);
-            document.getElementById(`val-${field}`).innerText = value + '%';
-            saveCache();
-        }
-
-        // Navigation Engine
-        function nextStep(step) {
-            // Validate inputs prior to transition
-            if (currentStep === 1 && step > 1) {
-                if (!formData.age || !formData.seniority || !formData.status) {
-                    document.getElementById('step-1-error').classList.remove('hidden');
-                    logDebug("Validation failed at step 1: Mandatory fields are missing.");
-                    return;
-                }
-                document.getElementById('step-1-error').classList.add('hidden');
-                formData.name = document.getElementById('input-name').value;
-            }
-
-            if (currentStep === 2 && step > 2) {
-                if (!formData.likert1 || !formData.likert2 || !formData.likert3) {
-                    document.getElementById('step-2-error').classList.remove('hidden');
-                    logDebug("Validation failed at step 2: Likert evaluations are missing.");
-                    return;
-                }
-                document.getElementById('step-2-error').classList.add('hidden');
-            }
-
-            if (currentStep === 3 && step > 3) {
-                formData.comments = document.getElementById('input-comments').value;
-            }
-
-            // Hide all step divs
-            document.getElementById('step-welcome').classList.add('hidden');
-            document.getElementById('step-personal').classList.add('hidden');
-            document.getElementById('step-vision').classList.add('hidden');
-            document.getElementById('step-investment').classList.add('hidden');
-            document.getElementById('step-summary').classList.add('hidden');
-
-            // Show target div
-            let targetId = 'step-welcome';
-            if (step === 1) targetId = 'step-personal';
-            if (step === 2) targetId = 'step-vision';
-            if (step === 3) targetId = 'step-investment';
-            if (step === 4) targetId = 'step-summary';
-
-            document.getElementById(targetId).classList.remove('hidden');
-            currentStep = step;
-            logDebug(`Mapsd to Step ${step} (${targetId})`);
-
-            // Update Header progress
-            const progressIndicator = document.getElementById('progress-indicator');
-            const progressText = document.getElementById('progress-text');
-            
-            if (step === 0) {
-                progressIndicator.style.width = '5%';
-                progressText.innerText = 'ברוכים הבאים';
+            // Show new
+            if (currentStep <= totalSteps) {
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                document.getElementById('navContainer').classList.remove('hidden');
             } else {
-                const pct = (step / 4) * 100;
-                progressIndicator.style.width = `${pct}%`;
-                progressText.innerText = `שלב ${step} מתוך 4`;
+                // We reached the Submission event
+                document.getElementById('navContainer').classList.add('hidden');
+                document.getElementById('setupFooter').classList.add('hidden');
+                document.getElementById('configPanel').classList.add('hidden');
+                
+                handleSubmission();
+                return;
             }
 
-            // Special handling for Step 4 (Render Summary and Trigger Auto-Submit immediately)
-            if (step === 4) {
-                renderReviewContent();
-                triggerAutoSubmission();
+            // Sync Nav Buttons state
+            document.getElementById('btnPrev').style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+            if (currentStep === totalSteps) {
+                document.getElementById('btnNext').innerHTML = `שלח שאלון <i class="fa-solid fa-paper-plane"></i>`;
+            } else {
+                document.getElementById('btnNext').innerHTML = `הבא <i class="fa-solid fa-arrow-left"></i>`;
             }
+
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Safe Rendering of Summary Content to avoid JavaScript runtime crashes
-        function renderReviewContent() {
-            logDebug("Rendering review content safely...");
-            const container = document.getElementById('review-content');
-            
-            try {
-                let html = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b border-slate-200">
-                        <div><strong class="text-slate-600">שם החבר:</strong> <span class="font-semibold text-slate-800">${formData.name || 'לא צוין'}</span></div>
-                        <div><strong class="text-slate-600">קבוצת גיל:</strong> <span class="font-semibold text-slate-800">${formData.age || 'לא נבחר'}</span></div>
-                        <div><strong class="text-slate-600">ותק בטללים:</strong> <span class="font-semibold text-slate-800">${formData.seniority || 'לא נבחר'}</span></div>
-                        <div><strong class="text-slate-600">מעמד בקיבוץ:</strong> <span class="font-semibold text-slate-800">${formData.status || 'לא נבחר'}</span></div>
-                    </div>
-                    <div class="space-y-2 py-3 border-b border-slate-200">
-                        <h4 class="font-bold text-slate-700">תפיסות יסוד וחזון (ציון 1-5):</h4>
-                        <div class="flex justify-between"><span>סוציאליזם ושיתופיות:</span> <span class="font-bold text-emerald-800">${formData.likert1 || 'N/A'}</span></div>
-                        <div class="flex justify-between"><span>יזמות ופיתוח עסקי:</span> <span class="font-bold text-emerald-800">${formData.likert2 || 'N/A'}</span></div>
-                        <div class="flex justify-between"><span>שיוך דירות ונכסים:</span> <span class="font-bold text-emerald-800">${formData.likert3 || 'N/A'}</span></div>
-                    </div>
-                    <div class="space-y-2 py-3 border-b border-slate-200">
-                        <h4 class="font-bold text-slate-700">סדרי עדיפויות להשקעה:</h4>
-                        <div class="flex justify-between"><span>חקלאות, אנרגיה ותעשייה:</span> <span class="font-semibold">${formData.inv1}%</span></div>
-                        <div class="flex justify-between"><span>מבני קהילה, חינוך ותרבות:</span> <span class="font-semibold">${formData.inv2}%</span></div>
-                        <div class="flex justify-between"><span>תשתיות והרחבה פיזית:</span> <span class="font-semibold">${formData.inv3}%</span></div>
-                    </div>
-                    <div class="pt-2">
-                        <strong class="text-slate-600 block mb-1">הערות ודגשים נוספים:</strong>
-                        <p class="text-slate-700 italic bg-white p-2 rounded border border-slate-100 max-h-24 overflow-y-auto custom-scrollbar">${formData.comments || 'אין הערות נוספות.'}</p>
-                    </div>
-                `;
-                container.innerHTML = html;
-                logDebug("Summary content rendered successfully.");
-            } catch (err) {
-                logDebug("CRITICAL RENDER ERROR: " + err.message);
-                container.innerHTML = `<div class="text-red-600 bg-red-50 p-3 rounded">אירעה שגיאה בעיבוד נתוני הסיכום: ${err.message}</div>`;
-            }
+        function updateProgress() {
+            const pct = ((currentStep - 1) / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = `${pct}%`;
         }
 
-        // Auto Submission with absolute transparency, timeouts, and CORS mitigation
-        function triggerAutoSubmission() {
-            logDebug("Initiating automatic submission workflow...");
+        // Handle automated sending to Google Sheets
+        function handleSubmission() {
+            // Define your hardcoded URL inside the quotes below
+            const hardcodedUrl = "https://script.google.com/macros/s/AKfycby4AdF7mT5fLTVAQtonDQKvXbtbEkCT9Ze434FUGJkKFBH7ua_ZW4oGpAfuR4xqiIQA/exec"; 
             
-            // Setup status box to Loading
-            const statusBox = document.getElementById('submission-status-box');
-            const statusSpinner = document.getElementById('status-spinner-container');
-            const statusTitle = document.getElementById('status-title');
-            const statusSubtitle = document.getElementById('status-subtitle');
-            const failsafeActions = document.getElementById('failsafe-actions');
-            const retryBtn = document.getElementById('summary-retry-btn');
-            const backBtn = document.getElementById('summary-back-btn');
+            const scriptUrl = hardcodedUrl || localStorage.getItem('tlalim_sheets_script_url') || document.getElementById('sheetUrlInput').value.trim();
+            
+            if (!scriptUrl || scriptUrl === "") {
+                // No cloud configured - skip directly to success page and warn gently
+                showSuccessPage(false);
+                return;
+            }
 
-            statusBox.className = "my-6 p-5 rounded-xl border border-blue-200 bg-blue-50/50 transition-all duration-300";
-            statusSpinner.classList.remove('hidden');
-            statusTitle.className = "font-bold text-blue-900";
-            statusTitle.innerText = "שולח את תשובותיך לגיליון הענן של הקיבוץ...";
-            statusSubtitle.innerText = "מתבצעת התחברות לשרת, נא להמתין...";
-            failsafeActions.classList.add('hidden');
-            retryBtn.classList.add('hidden');
+            // Show Loader Screen
+            document.getElementById('stepLoading').classList.add('active');
+            
+            const answers = collectAnswers();
+            answers['Timestamp'] = new Date().toLocaleString('he-IL'); // Add time indicator
 
-            // Collect payload
-            const payload = {
-                timestamp: new Date().toLocaleString('he-IL', { timeZone: 'Asia/Jerusalem' }),
-                name: formData.name || 'אנונימי',
-                age: formData.age || '',
-                seniority: formData.seniority || '',
-                status: formData.status || '',
-                likert1: formData.likert1 || '',
-                likert2: formData.likert2 || '',
-                likert3: formData.likert3 || '',
-                inv1: formData.inv1,
-                inv2: formData.inv2,
-                inv3: formData.inv3,
-                comments: formData.comments || ''
+            // We perform a safe fetch request with text/plain to bypass CORS preflight blocks in no-cors
+            fetch(scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors', // Essential for Google Apps Script redirects
+                cache: 'no-cache',
+                headers: {
+                    'Content-Type': 'text/plain' // Must use text/plain for CORS-safe-listed requests in no-cors
+                },
+                body: JSON.stringify(answers)
+            })
+            .then(() => {
+                // Successful send
+                document.getElementById('stepLoading').classList.remove('active');
+                showSuccessPage(true);
+            })
+            .catch(err => {
+                console.error("Cloud send failed:", err);
+                document.getElementById('stepLoading').classList.remove('active');
+                showSuccessPage(false, true); // Fallback to offline success screen with error message
+            });
+        }
+
+        function showSuccessPage(isSentToCloud, isError = false) {
+            document.getElementById('stepSuccess').classList.add('active');
+            const msgEl = document.getElementById('successMessage');
+            
+            if (isSentToCloud) {
+                msgEl.innerHTML = `✓ <strong>תשובתך נשלחה ונשמרה בהצלחה בגיליון הענן של טללים!</strong><br>תודה רבה על השתתפותך ועל תרומתך לעיצוב העתיד הכלכלי והאסטרטגי של הקהילה.`;
+            } else if (isError) {
+                msgEl.innerHTML = `⚠️ <strong>השאלון הושלם, אך אירעה שגיאה בחיבור לענן.</strong><br>אל דאגה! התשובות שלך שמורות כרגע על המכשיר. תוכל להוריד אותן כקובץ אקסל למטה או להעתיקן ולשלוח אותן ידנית למנהל המערכת.`;
+            } else {
+                msgEl.innerHTML = `תשובתך הושלמה בהצלחה!<br>כדי לשמור אותה, אנא הורד/י את קובץ ה-CSV המקומי או העתק/י את התשובות ללוח באמצעות הפקדים למטה והעבר/י אותן למרכז הנתונים בקיבוץ.`;
+            }
+            updateProgress();
+        }
+
+        // Gather all filled data
+        function collectAnswers() {
+            const formData = new FormData(document.getElementById('visionForm'));
+            const answers = {};
+
+            // Helper to get checked options for multi-selects
+            const getMultipleChecked = (name) => {
+                const checked = [];
+                document.querySelectorAll(`input[name="${name}"]:checked`).forEach(chk => {
+                    checked.push(chk.value);
+                });
+                return checked.join(', ');
             };
 
-            // Embed Google Apps Script URL (taken exactly from your images)
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbyb5Xmcl8O1v60uL_5mN40R0R_4W-B
+            answers['שאלה 1: קבוצת גיל'] = formData.get('q1') || 'לא נענה';
+            answers['שאלה 2: ותק ומעמד'] = formData.get('q2') || 'לא נענה';
+            answers['שאלה 3: תעסוקה'] = formData.get('q3') || 'לא נענה';
+
+            answers['שאלה 4: עדיפות - הכנסה שוטפת עכשיו (רמת חיים)'] = formData.get('q4_r1') || 'לא דורג';
+            answers['שאלה 4: עדיפות - צמיחת נכסים ותשואה לטווח ארוך'] = formData.get('q4_r2') || 'לא דורג';
+            answers['שאלה 4: עדיפות - תעסוקה והמשכיות דורית'] = formData.get('q4_r3') || 'לא דורג';
+            answers['שאלה 4: עדיפות - שמירה על ההון וביטחון כלכלי'] = formData.get('q4_r4') || 'לא דורג';
+            answers['שאלה 4: עדיפות - העלאת רמת השירותים בקיבוץ'] = formData.get('q4_r5') || 'לא דורג';
+
+            answers['שאלה 5: עדיפות לשימור - הקהילה והערבות ההדדית'] = formData.get('q5_r1') || 'לא דורג';
+            answers['שאלה 5: עדיפות לשימור - הביטחון הכלכלי'] = formData.get('q5_r2') || 'לא דורג';
+            answers['שאלה 5: עדיפות לשימור - האופי הכפרי'] = formData.get('q5_r3') || 'לא דורג';
+            answers['שאלה 5: עדיפות לשימור - השטחים הפתוחים והסביבה'] = formData.get('q5_r4') || 'לא דורג';
+            answers['שאלה 5: עדיפות לשימור - משיכת צעירים ומשפחות'] = formData.get('q5_r5') || 'לא דורג';
+
+            answers['שאלה 6: עדיפות לשינוי - יותר מקורות הכנסה'] = formData.get('q6_r1') || 'לא דורג';
+            answers['שאלה 6: עדיפות לשינוי - יותר מקומות עבודה'] = formData.get('q6_r2') || 'לא דורג';
+            answers['שאלה 6: עדיפות לשינוי - יותר משפחות צעירות'] = formData.get('q6_r3') || 'לא דורג';
+            answers['שאלה 6: עדיפות לשינוי - יותר שירותים קהילתיים'] = formData.get('q6_r4') || 'לא דורג';
+            answers['שאלה 6: עדיפות לשינוי - יותר יוזמות וחדשנות'] = formData.get('q6_r5') || 'לא דורג';
+
+            answers['שאלה 7: חשיבות שטחים פתוחים (1-5)'] = formData.get('q7') || 'לא דורג';
+
+            answers['שאלה 8: אופק זמן השקעות'] = formData.get('q8') || 'לא נענה';
+            answers['שאלה 9: רמת סיכון מתאימה'] = formData.get('q9') || 'לא נענה';
+            answers['שאלה 10: העדפת יציבות על פני הזדמנות (1-5)'] = formData.get('q10') || 'לא דורג';
+            answers['שאלה 11: גישה להלוואות ומינוף'] = formData.get('q11') || 'לא נענה';
+            answers['שאלה 12: חלוקת רווחים'] = formData.get('q12') || 'לא נענה';
+
+            answers['שאלה 13: תרחיש השקעה (עמלה או עמל)'] = formData.get('q13') || 'לא נענה';
+            answers['שאלה 14: גישה מועדפת לניהול מיזם'] = formData.get('q14') || 'לא נענה';
+            answers['שאלה 15: הערכת יכולת ניהול עצמית (1-5)'] = formData.get('q15') || 'לא דורג';
+            answers['שאלה 16: מה לחזק לפני השקעות'] = getMultipleChecked('q16') || 'לא נבחר דבר';
+
+            answers['שאלה 17: מתי לא להשקיע'] = getMultipleChecked('q17') || 'לא נבחר דבר';
+
+            answers['שאלה 18: התאמה - אנרגיה מתחדשת'] = formData.get('q18_r1') || 'לא דורג';
+            answers['שאלה 18: התאמה - נדלן מניב'] = formData.get('q18_r2') || 'לא דורג';
+            answers['שאלה 18: התאמה - חקלאות מתקדמת'] = formData.get('q18_r3') || 'לא דורג';
+            answers['שאלה 18: התאמה - תיירות מדברית'] = formData.get('q18_r4') || 'לא דורג';
+            answers['שאלה 18: התאמה - עסקים קהילתיים'] = formData.get('q18_r5') || 'לא דורג';
+            answers['שאלה 18: התאמה - פיננסים סולידיים'] = formData.get('q18_r6') || 'לא דורג';
+            answers['שאלה 18: התאמה - אחסנה פתוחה'] = formData.get('q18_r7') || 'לא דורג';
+            answers['שאלה 18: התאמה - מפעלי תעשייה'] = formData.get('q18_r8') || 'לא דורג';
+
+            answers['שאלה 19: מודל חזון לקיבוץ'] = formData.get('q19') || 'לא נענה';
+            answers['שאלה 20: הסיכון הגדול ביותר'] = formData.get('q20') || 'אין תגובה';
+            answers['שאלה 21: ההזדמנות הגדולה ביותר'] = formData.get('q21') || 'אין תגובה';
+            answers['שאלה 22: חזון ל-10-15 שנים קדימה'] = formData.get('q22') || 'אין תגובה';
+
+            return answers;
+        }
+
+        // Export answers as formatted text copied to clipboard
+        function copyToClipboard() {
+            const data = collectAnswers();
+            let text = "--- תשובות שאלון חזון כלכלי-אסטרטגי: קיבוץ טללים ---\n\n";
+            for (const [key, val] of Object.entries(data)) {
+                text += `${key}: ${val}\n`;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const alertEl = document.getElementById('copyAlert');
+                alertEl.classList.remove('hidden');
+                setTimeout(() => alertEl.classList.add('hidden'), 4000);
+            });
+        }
+
+        // Download Excel/CSV format directly
+        function downloadCSV() {
+            const data = collectAnswers();
+            let csvContent = "\uFEFF"; // UTF-8 BOM for Hebrew Excel compatibility
+            csvContent += "שאלה,תשובה\n";
+            
+            for (const [key, val] of Object.entries(data)) {
+                // Escaping quotes for CSV safety
+                let escapedKey = key.replace(/"/g, '""');
+                let escapedVal = val.replace(/"/g, '""');
+                csvContent += `"${escapedKey}","${escapedVal}"\n`;
+            }
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Tlalim_Vision_Survey_Response.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
