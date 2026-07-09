@@ -1174,8 +1174,8 @@
 
         // Handle automated sending to Google Sheets
         function handleSubmission() {
-            // Define your hardcoded URL inside the quotes below if needed, or fall back to input/localStorage
-            const hardcodedUrl = "https://script.google.com/macros/s/AKfycby4AdF7mT5fLTVAQtonDQKvXtbtEkCT9Ze434FUGJkKFBH7ua_ZW4oGpAfuR4xqiIqA/exec"; 
+            // Define your hardcoded URL inside the quotes below
+            const hardcodedUrl = "https://script.google.com/macros/s/AKfycby4AdF7mT5fLTVAQtonDQKvXbtbEkCT9Ze434FUGJkKFBH7ua_ZW4oGpAfuR4xqiIQA/exec"; 
             
             const scriptUrl = hardcodedUrl || localStorage.getItem('tlalim_sheets_script_url') || document.getElementById('sheetUrlInput').value.trim();
             
@@ -1191,18 +1191,18 @@
             const answers = collectAnswers();
             answers['Timestamp'] = new Date().toLocaleString('he-IL'); // Add time indicator
 
-            // We perform a safe fetch request with explicit CORS prevention fallback
+            // We perform a safe fetch request with text/plain to bypass CORS preflight blocks in no-cors
             fetch(scriptUrl, {
                 method: 'POST',
                 mode: 'no-cors', // Essential for Google Apps Script redirects
                 cache: 'no-cache',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'text/plain' // Must use text/plain for CORS-safe-listed requests in no-cors
                 },
                 body: JSON.stringify(answers)
             })
             .then(() => {
-                // Successful send or handled by no-cors fallback
+                // Successful send
                 document.getElementById('stepLoading').classList.remove('active');
                 showSuccessPage(true);
             })
