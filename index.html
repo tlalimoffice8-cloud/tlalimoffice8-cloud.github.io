@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V1 שאלון חזון כלכלי-אסטרטגי - קיבוץ טללים</title>
+    <title>שאלון חזון כלכלי-אסטרטגי - קיבוץ טללים V2</title>
     <!-- Premium Hebrew Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -365,19 +365,119 @@
             padding: 60px 20px;
         }
 
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(194, 65, 12, 0.2);
+        .loader-icon-wrap {
+            position: relative;
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 24px auto;
+        }
+
+        .spinner-ring {
+            position: absolute;
+            inset: 0;
+            border: 5px solid rgba(194, 65, 12, 0.15);
             border-top: 5px solid var(--accent-terracotta);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px auto;
+            animation: spin 1.1s linear infinite;
+        }
+
+        .loader-main-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            color: var(--accent-terracotta);
+            animation: iconPulse 1.6s ease-in-out infinite;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.12); opacity: 0.8; }
+        }
+
+        /* Send stages tracker */
+        .send-stages {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 36px;
+        }
+
+        .send-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 90px;
+        }
+
+        .send-stage .stage-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            background: var(--progress-bg);
+            color: var(--secondary-gray);
+            border: 2px solid var(--card-border);
+        }
+
+        .send-stage span {
+            font-size: 13px;
+            color: var(--secondary-gray);
+            font-weight: 600;
+        }
+
+        .send-stage.active .stage-icon {
+            background: rgba(194, 65, 12, 0.1);
+            color: var(--accent-terracotta);
+            border-color: var(--accent-terracotta);
+            animation: stageBounce 0.9s ease-in-out infinite;
+        }
+
+        .send-stage.done .stage-icon {
+            background: var(--accent-olive);
+            color: #FFFFFF;
+            border-color: var(--accent-olive);
+        }
+
+        .send-stage.done span,
+        .send-stage.active span {
+            color: var(--primary-slate);
+        }
+
+        @keyframes stageBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .stage-connector {
+            height: 2px;
+            width: 40px;
+            background: var(--card-border);
+            margin-top: 22px;
+            border-radius: 2px;
+        }
+
+        .stage-connector.done {
+            background: var(--accent-olive);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .loader-main-icon,
+            .send-stage.active .stage-icon {
+                animation: none;
+            }
         }
 
         /* Success & Review Screens */
@@ -403,72 +503,6 @@
             color: var(--secondary-gray);
             line-height: 1.6;
             margin-bottom: 30px;
-        }
-
-        .export-box {
-            background-color: #F4EFEA;
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 24px;
-            margin-top: 30px;
-            text-align: right;
-        }
-
-        .export-box h3 {
-            font-family: 'Rubik', sans-serif;
-            margin-top: 0;
-            color: var(--primary-slate);
-        }
-
-        /* Cloud Setup UI in Page Footer */
-        .cloud-setup-footer {
-            background: #EAE3D8;
-            border-top: 1px solid var(--card-border);
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            color: var(--secondary-gray);
-        }
-
-        .cloud-setup-btn {
-            background: none;
-            border: 1px solid var(--secondary-gray);
-            color: var(--secondary-gray);
-            padding: 4px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .cloud-setup-btn:hover {
-            background: var(--secondary-gray);
-            color: #FFF;
-        }
-
-        .cloud-config-modal {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .cloud-config-modal input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid var(--card-border);
-            border-radius: 4px;
-            font-size: 13px;
-            margin-top: 8px;
-            margin-bottom: 8px;
-            outline: none;
-        }
-
-        .cloud-config-modal input:focus {
-            border-color: var(--accent-terracotta);
         }
 
         /* Custom Utility styles */
@@ -1043,9 +1077,39 @@
             <!-- LOADING SCREEN DURING SEND -->
             <div class="step-section" id="stepLoading">
                 <div class="loader-screen">
-                    <div class="spinner"></div>
-                    <h2>שולח את תשובותיך לענן...</h2>
-                    <p>אנא המתן/י שניות בודדות, התשובות נרשמות כעת ישירות בגיליון האקסל הכללי.</p>
+                    <div class="loader-icon-wrap">
+                        <div class="spinner-ring"></div>
+                        <i id="loaderIcon" class="fa-solid fa-list-check loader-main-icon"></i>
+                    </div>
+                    <h2 id="loaderTitle">אוסף את תשובותיך...</h2>
+                    <p id="loaderSubtitle">רק כמה שניות</p>
+
+                    <div class="send-stages">
+                        <div class="send-stage" id="stage1">
+                            <div class="stage-icon"><i class="fa-solid fa-list-check"></i></div>
+                            <span>איסוף תשובות</span>
+                        </div>
+                        <div class="stage-connector" id="conn1"></div>
+                        <div class="send-stage" id="stage2">
+                            <div class="stage-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                            <span>שליחה</span>
+                        </div>
+                        <div class="stage-connector" id="conn2"></div>
+                        <div class="send-stage" id="stage3">
+                            <div class="stage-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                            <span>שמירה בגיליון</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ERROR SCREEN (network failure) -->
+            <div class="step-section" id="stepError">
+                <div class="thank-you-screen">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-terracotta);"></i>
+                    <h2>השליחה לא הצליחה</h2>
+                    <p>נראה שיש בעיה בחיבור לאינטרנט. התשובות שלך עדיין שמורות בטופס – אפשר פשוט לנסות שוב.</p>
+                    <button type="button" class="btn btn-primary" style="margin: 0 auto;" onclick="handleSubmission()"><i class="fa-solid fa-rotate-right"></i> נסה/י שוב</button>
                 </div>
             </div>
 
@@ -1054,17 +1118,7 @@
                 <div class="thank-you-screen">
                     <i class="fa-solid fa-circle-check"></i>
                     <h2>תודה רבה על השתתפותך!</h2>
-                    <p id="successMessage">תשובתך נקלטה בהצלחה ותסייע רבות בגיבוש החזון והמדיניות הכלכלית של קיבוץ טללים לשנים הבאות.</p>
-                    
-                    <div class="export-box">
-                        <h3>גיבוי / הורדת נתוני המענה שלך</h3>
-                        <p>באפשרותך להוריד תמיד קובץ אקסל מקומי המכיל את הבחירות שסימנת בשאלון זה.</p>
-                        <div style="display: flex; gap:12px; justify-content: flex-start; margin-top: 15px;">
-                            <button type="button" class="btn btn-primary" onclick="downloadCSV()"><i class="fa-solid fa-file-csv"></i> הורדה כקובץ Excel / CSV</button>
-                            <button type="button" class="btn btn-secondary" onclick="copyToClipboard()"><i class="fa-solid fa-copy"></i> העתקת תשובות ללוח</button>
-                        </div>
-                        <div id="copyAlert" style="margin-top: 10px; color: var(--accent-olive); font-weight: bold;" class="hidden">✓ התשובות הועתקו ללוח בהצלחה!</div>
-                    </div>
+                    <p id="successMessage">תשובתך נשלחה ונשמרה בהצלחה!<br>תודה רבה על השתתפותך ועל תרומתך לעיצוב העתיד הכלכלי והאסטרטגי של הקהילה.</p>
                 </div>
             </div>
 
@@ -1075,21 +1129,8 @@
             </div>
         </form>
 
-        <!-- Configuration Panel for Admin -->
-        <div class="cloud-setup-footer" id="setupFooter">
-            <span>ממשק חיבור לגיליון גוגל (לא למילוי החברים)</span>
-            <button type="button" class="cloud-setup-btn" onclick="toggleConfigPanel()"><i class="fa-solid fa-gear"></i> הגדרת חיבור אקסל</button>
-        </div>
-
-        <div id="configPanel" class="cloud-config-modal hidden" style="margin: 20px 40px;">
-            <h4 style="margin-top: 0; color: var(--accent-terracotta);">הגדרת שליחת נתונים לענן (Google Sheets)</h4>
-            <p style="margin: 5px 0; font-size: 13px;">הדבק כאן את כתובת ה-Web App של Google Script שקיבלת מהמדריך:</p>
-            <input type="text" id="sheetUrlInput" placeholder="https://script.google.com/macros/s/.../exec" oninput="saveScriptUrl()">
-            <small style="color: var(--accent-olive); display: block; margin-top: 5px;">✓ הכתובת נשמרת אוטומטית בדפדפן זה.</small>
-        </div>
     </div>
 
-    <!-- JS Logic -->
     <script>
         let currentStep = 1;
         const totalSteps = 6;
@@ -1113,24 +1154,8 @@
             }
         });
 
-        // Initialize progress bar and load saved URL
+        // Initialize progress bar
         updateProgress();
-        window.addEventListener('load', () => {
-            const savedUrl = localStorage.getItem('tlalim_sheets_script_url');
-            if (savedUrl) {
-                document.getElementById('sheetUrlInput').value = savedUrl;
-            }
-        });
-
-        function toggleConfigPanel() {
-            const panel = document.getElementById('configPanel');
-            panel.classList.toggle('hidden');
-        }
-
-        function saveScriptUrl() {
-            const val = document.getElementById('sheetUrlInput').value.trim();
-            localStorage.setItem('tlalim_sheets_script_url', val);
-        }
 
         function moveStep(direction) {
             // Validate limits
@@ -1149,9 +1174,6 @@
             } else {
                 // We reached the Submission event
                 document.getElementById('navContainer').classList.add('hidden');
-                document.getElementById('setupFooter').classList.add('hidden');
-                document.getElementById('configPanel').classList.add('hidden');
-                
                 handleSubmission();
                 return;
             }
@@ -1173,59 +1195,80 @@
             document.getElementById('progressBar').style.width = `${pct}%`;
         }
 
-        // Handle automated sending to Google Sheets
-        function handleSubmission() {
-            // Define your hardcoded URL inside the quotes below
-            const hardcodedUrl = "https://script.google.com/macros/s/AKfycby4AdF7mT5fLTVAQtonDQKvXbtbEkCT9Ze434FUGJkKFBH7ua_ZW4oGpAfuR4xqiIQA/exec"; 
-            
-            const scriptUrl = hardcodedUrl || localStorage.getItem('tlalim_sheets_script_url') || document.getElementById('sheetUrlInput').value.trim();
-            
-            if (!scriptUrl || scriptUrl === "") {
-                // No cloud configured - skip directly to success page and warn gently
-                showSuccessPage(false);
-                return;
+        // Fixed destination - responses are sent only to the community Google Sheet
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFKaunOlsWgwgLeU93WxI2XzhPsNGtfQgQBuy0s92DNBGUsPgH1-YuNb38ShuGMLH3/exec";
+
+        // Loading stage animation
+        const loaderStages = [
+            { icon: 'fa-list-check',      title: 'אוסף את תשובותיך...',    subtitle: 'מארגן את כל הבחירות שסימנת' },
+            { icon: 'fa-paper-plane',     title: 'שולח לגיליון הקהילה...',  subtitle: 'התשובות בדרך, זה לוקח רק רגע' },
+            { icon: 'fa-cloud-arrow-up',  title: 'שומר בענן...',            subtitle: 'כמעט סיימנו' }
+        ];
+
+        function setLoaderStage(index) {
+            const stage = loaderStages[index];
+            document.getElementById('loaderIcon').className = `fa-solid ${stage.icon} loader-main-icon`;
+            document.getElementById('loaderTitle').textContent = stage.title;
+            document.getElementById('loaderSubtitle').textContent = stage.subtitle;
+
+            for (let i = 0; i < 3; i++) {
+                const el = document.getElementById(`stage${i + 1}`);
+                el.classList.remove('active', 'done');
+                if (i < index) el.classList.add('done');
+                if (i === index) el.classList.add('active');
             }
-
-            // Show Loader Screen
-            document.getElementById('stepLoading').classList.add('active');
-            
-            const answers = collectAnswers();
-            answers['Timestamp'] = new Date().toLocaleString('he-IL'); // Add time indicator
-
-            // We perform a safe fetch request with text/plain to bypass CORS preflight blocks in no-cors
-            fetch(scriptUrl, {
-                method: 'POST',
-                mode: 'no-cors', // Essential for Google Apps Script redirects
-                cache: 'no-cache',
-                headers: {
-                    'Content-Type': 'text/plain' // Must use text/plain for CORS-safe-listed requests in no-cors
-                },
-                body: JSON.stringify(answers)
-            })
-            .then(() => {
-                // Successful send
-                document.getElementById('stepLoading').classList.remove('active');
-                showSuccessPage(true);
-            })
-            .catch(err => {
-                console.error("Cloud send failed:", err);
-                document.getElementById('stepLoading').classList.remove('active');
-                showSuccessPage(false, true); // Fallback to offline success screen with error message
-            });
+            document.getElementById('conn1').classList.toggle('done', index >= 1);
+            document.getElementById('conn2').classList.toggle('done', index >= 2);
         }
 
-        function showSuccessPage(isSentToCloud, isError = false) {
-            document.getElementById('stepSuccess').classList.add('active');
-            const msgEl = document.getElementById('successMessage');
-            
-            if (isSentToCloud) {
-                msgEl.innerHTML = `✓ <strong>תשובתך נשלחה ונשמרה בהצלחה בגיליון הענן של טללים!</strong><br>תודה רבה על השתתפותך ועל תרומתך לעיצוב העתיד הכלכלי והאסטרטגי של הקהילה.`;
-            } else if (isError) {
-                msgEl.innerHTML = `⚠️ <strong>השאלון הושלם, אך אירעה שגיאה בחיבור לענן.</strong><br>אל דאגה! התשובות שלך שמורות כרגע על המכשיר. תוכל להוריד אותן כקובץ אקסל למטה או להעתיקן ולשלוח אותן ידנית למנהל המערכת.`;
-            } else {
-                msgEl.innerHTML = `תשובתך הושלמה בהצלחה!<br>כדי לשמור אותה, אנא הורד/י את קובץ ה-CSV המקומי או העתק/י את התשובות ללוח באמצעות הפקדים למטה והעבר/י אותן למרכז הנתונים בקיבוץ.`;
-            }
-            updateProgress();
+        let isSubmitting = false;
+
+        // Handle automated sending to Google Sheets
+        function handleSubmission() {
+            if (isSubmitting) return;
+            isSubmitting = true;
+
+            // Show loader, hide error screen if returning from a retry
+            document.getElementById('stepError').classList.remove('active');
+            document.getElementById('stepLoading').classList.add('active');
+            setLoaderStage(0);
+
+            const answers = collectAnswers();
+            answers['Timestamp'] = new Date().toLocaleString('he-IL');
+
+            // Advance stage visuals while the request runs
+            const t1 = setTimeout(() => setLoaderStage(1), 900);
+            const t2 = setTimeout(() => setLoaderStage(2), 1900);
+
+            // Minimum display time so the animation doesn't flash
+            const minDelay = new Promise(resolve => setTimeout(resolve, 2600));
+
+            // no-cors POST without a Content-Type header sends text/plain,
+            // which Google Apps Script reads via e.postData.contents.
+            // Setting 'application/json' in no-cors mode is blocked by browsers.
+            const sendRequest = fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                body: JSON.stringify(answers)
+            });
+
+            Promise.all([sendRequest, minDelay])
+                .then(() => {
+                    document.getElementById('stepLoading').classList.remove('active');
+                    document.getElementById('stepSuccess').classList.add('active');
+                    updateProgress();
+                })
+                .catch(err => {
+                    console.error("Cloud send failed:", err);
+                    clearTimeout(t1);
+                    clearTimeout(t2);
+                    document.getElementById('stepLoading').classList.remove('active');
+                    document.getElementById('stepError').classList.add('active');
+                })
+                .finally(() => {
+                    isSubmitting = false;
+                });
         }
 
         // Gather all filled data
@@ -1296,44 +1339,6 @@
             return answers;
         }
 
-        // Export answers as formatted text copied to clipboard
-        function copyToClipboard() {
-            const data = collectAnswers();
-            let text = "--- תשובות שאלון חזון כלכלי-אסטרטגי: קיבוץ טללים ---\n\n";
-            for (const [key, val] of Object.entries(data)) {
-                text += `${key}: ${val}\n`;
-            }
-            
-            navigator.clipboard.writeText(text).then(() => {
-                const alertEl = document.getElementById('copyAlert');
-                alertEl.classList.remove('hidden');
-                setTimeout(() => alertEl.classList.add('hidden'), 4000);
-            });
-        }
-
-        // Download Excel/CSV format directly
-        function downloadCSV() {
-            const data = collectAnswers();
-            let csvContent = "\uFEFF"; // UTF-8 BOM for Hebrew Excel compatibility
-            csvContent += "שאלה,תשובה\n";
-            
-            for (const [key, val] of Object.entries(data)) {
-                // Escaping quotes for CSV safety
-                let escapedKey = key.replace(/"/g, '""');
-                let escapedVal = val.replace(/"/g, '""');
-                csvContent += `"${escapedKey}","${escapedVal}"\n`;
-            }
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", "Tlalim_Vision_Survey_Response.csv");
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
     </script>
 </body>
 </html>
