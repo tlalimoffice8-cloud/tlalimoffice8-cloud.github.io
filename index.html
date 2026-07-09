@@ -1115,7 +1115,7 @@
         // Initialize progress bar and load saved URL
         updateProgress();
         window.addEventListener('load', () => {
-            const savedUrl = localStorage.getItem('https://script.google.com/macros/s/AKfycby4AdF7mT5fLTVAQtonDQKvXtbtEkCT9Ze434FUGJkKFBH7ua_ZW4oGpAfuR4xqiIqA/exec');
+            const savedUrl = localStorage.getItem('tlalim_sheets_script_url');
             if (savedUrl) {
                 document.getElementById('sheetUrlInput').value = savedUrl;
             }
@@ -1174,9 +1174,12 @@
 
         // Handle automated sending to Google Sheets
         function handleSubmission() {
-            const scriptUrl = localStorage.getItem('tlalim_sheets_script_url') || document.getElementById('sheetUrlInput').value.trim();
+            // Define your hardcoded URL inside the quotes below if needed, or fall back to input/localStorage
+            const hardcodedUrl = "https://script.google.com/macros/s/AKfycby4AdF7mT5fLTVAQtonDQKvXtbtEkCT9Ze434FUGJkKFBH7ua_ZW4oGpAfuR4xqiIqA/exec"; 
             
-            if (!scriptUrl) {
+            const scriptUrl = hardcodedUrl || localStorage.getItem('tlalim_sheets_script_url') || document.getElementById('sheetUrlInput').value.trim();
+            
+            if (!scriptUrl || scriptUrl === "") {
                 // No cloud configured - skip directly to success page and warn gently
                 showSuccessPage(false);
                 return;
@@ -1188,17 +1191,18 @@
             const answers = collectAnswers();
             answers['Timestamp'] = new Date().toLocaleString('he-IL'); // Add time indicator
 
-            // Send to Google Sheets Apps Script via fetch (JSONP / POST)
+            // We perform a safe fetch request with explicit CORS prevention fallback
             fetch(scriptUrl, {
                 method: 'POST',
-                mode: 'no-cors', // Standard workaround for Google Apps Script Web App CORS
+                mode: 'no-cors', // Essential for Google Apps Script redirects
+                cache: 'no-cache',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(answers)
             })
             .then(() => {
-                // Success
+                // Successful send or handled by no-cors fallback
                 document.getElementById('stepLoading').classList.remove('active');
                 showSuccessPage(true);
             })
