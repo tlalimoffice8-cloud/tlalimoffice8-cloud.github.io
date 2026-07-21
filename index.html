@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>שאלון חזון כלכלי-אסטרטגי - קיבוץ טללים V4</title>
+    <title>שאלון חזון כלכלי-אסטרטגי - קיבוץ טללים V5</title>
     <!-- Premium Hebrew Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -304,6 +304,43 @@
             cursor: pointer;
         }
 
+        /* Percentage Slider (Question 12) */
+        .percentage-slider-wrap {
+            margin-top: 10px;
+        }
+
+        .percentage-display {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 14px;
+            font-weight: 600;
+            color: var(--primary-slate);
+        }
+
+        .percentage-display span {
+            flex: 1;
+            text-align: center;
+            padding: 10px 12px;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            background-color: #FCFAF8;
+        }
+
+        .percentage-slider {
+            width: 100%;
+            accent-color: var(--accent-terracotta);
+            cursor: pointer;
+        }
+
+        .percentage-slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--secondary-gray);
+        }
+
         /* Navigation Buttons */
         .nav-buttons {
             display: flex;
@@ -563,15 +600,16 @@
                 <!-- Q3 -->
                 <div class="question-card">
                     <p class="question-title">שאלה 3: תעסוקה</p>
+                    <p class="question-explanation">ניתן לבחור מספר אפשרויות</p>
                     <div class="options-list">
-                        <label class="option-label"><input type="radio" name="q3" value="עובד/ת בענפי הקיבוץ"> עובד/ת בענפי הקיבוץ</label>
-                        <label class="option-label"><input type="radio" name="q3" value="עובד/ת מחוץ לקיבוץ כשכיר/ה"> עובד/ת מחוץ לקיבוץ כשכיר/ה</label>
-                        <label class="option-label"><input type="radio" name="q3" value="עצמאי/ת או בעל/ת עסק"> עצמאי/ת או בעל/ת עסק</label>
-                        <label class="option-label"><input type="radio" name="q3" value="משלב/ת עבודה בקיבוץ ומחוצה לו"> משלב/ת עבודה בקיבוץ ומחוצה לו</label>
-                        <label class="option-label"><input type="radio" name="q3" value="סטודנט/ית / חייל/ת / שירות לאומי"> סטודנט/ית / חייל/ת / שירות לאומי</label>
-                        <label class="option-label"><input type="radio" name="q3" value="פנסיונר/ית"> פנסיונר/ית</label>
-                        <label class="option-label"><input type="radio" name="q3" value="לא מועסק/ת כיום"> לא מועסק/ת כיום</label>
-                        <label class="option-label"><input type="radio" name="q3" value="אחר"> אחר</label>
+                        <label class="option-label"><input type="checkbox" name="q3" value="עובד/ת בענפי הקיבוץ"> עובד/ת בענפי הקיבוץ</label>
+                        <label class="option-label"><input type="checkbox" name="q3" value="עובד/ת מחוץ לקיבוץ כשכיר/ה"> עובד/ת מחוץ לקיבוץ כשכיר/ה</label>
+                        <label class="option-label"><input type="checkbox" name="q3" value="עצמאי/ת או בעל/ת עסק"> עצמאי/ת או בעל/ת עסק</label>
+                        <label class="option-label"><input type="checkbox" name="q3" value="משלב/ת עבודה בקיבוץ ומחוצה לו"> משלב/ת עבודה בקיבוץ ומחוצה לו</label>
+                        <label class="option-label"><input type="checkbox" name="q3" value="סטודנט/ית / חייל/ת / שירות לאומי"> סטודנט/ית / חייל/ת / שירות לאומי</label>
+                        <label class="option-label"><input type="checkbox" name="q3" value="פנסיונר/ית"> פנסיונר/ית</label>
+                        <label class="option-label"><input type="checkbox" name="q3" value="לא מועסק/ת כיום"> לא מועסק/ת כיום</label>
+                        <label class="option-label"><input type="checkbox" name="q3" value="אחר"> אחר</label>
                     </div>
                 </div>
             </div>
@@ -856,11 +894,17 @@
                 <!-- Q12 -->
                 <div class="question-card">
                     <p class="question-title">שאלה 12: חלוקת רווחים מול השקעה מחדש: כאשר יש לקיבוץ רווחים משמעותיים (לאחר הפרשות חובה ופנסיות), מה נכון לעשות כברירת מחדל, בכפוף למדרג שימושים?</p>
-                    <div class="options-list">
-                        <label class="option-label"><input type="radio" name="q12" value="להשקיע את רובם מחדש בעתיד הקיבוץ (70% השקעה / 30% חלוקה)."> להשקיע את רובם מחדש בעתיד הקיבוץ (70% השקעה / 30% חלוקה).</label>
-                        <label class="option-label"><input type="radio" name="q12" value="לחלק חלק לחברים ולהשקיע חלק באופן שווה (50% השקעה / 50% חלוקה)."> לחלק חלק לחברים ולהשקיע חלק באופן שווה (50% השקעה / 50% חלוקה).</label>
-                        <label class="option-label"><input type="radio" name="q12" value="לחלק את רוב הכסף כתוספת לחברים (30% השקעה / 70% חלוקה)."> לחלק את רוב הכסף כתוספת לחברים (30% השקעה / 70% חלוקה).</label>
-                        <label class="option-label"><input type="radio" name="q12" value="להחליט כל שנה מחדש, לא לקבוע יחס קבוע."> להחליט כל שנה מחדש, לא לקבוע יחס קבוע.</label>
+                    <p class="question-explanation">בחר/י את אחוז הרווחים שיושקע מחדש. היתרה תחולק לחברים.</p>
+                    <div class="percentage-slider-wrap">
+                        <div class="percentage-display">
+                            <span id="q12InvestmentDisplay">50% השקעה מחדש</span>
+                            <span id="q12DistributionDisplay">50% חלוקה לחברים</span>
+                        </div>
+                        <input type="range" id="q12" name="q12" class="percentage-slider" min="0" max="100" step="5" value="50">
+                        <div class="percentage-slider-labels">
+                            <span>0% השקעה</span>
+                            <span>100% השקעה</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1153,6 +1197,21 @@
             }
         });
 
+        // Update Question 12 percentage display
+        const q12Slider = document.getElementById('q12');
+        const q12InvestmentDisplay = document.getElementById('q12InvestmentDisplay');
+        const q12DistributionDisplay = document.getElementById('q12DistributionDisplay');
+
+        function updateQ12Display() {
+            const investmentPct = Number(q12Slider.value);
+            const distributionPct = 100 - investmentPct;
+            q12InvestmentDisplay.textContent = `${investmentPct}% השקעה מחדש`;
+            q12DistributionDisplay.textContent = `${distributionPct}% חלוקה לחברים`;
+        }
+
+        q12Slider.addEventListener('input', updateQ12Display);
+        updateQ12Display();
+
         // Initialize progress bar
         updateProgress();
 
@@ -1286,7 +1345,7 @@
 
             answers['שאלה 1: קבוצת גיל'] = formData.get('q1') || 'לא נענה';
             answers['שאלה 2: ותק ומעמד'] = formData.get('q2') || 'לא נענה';
-            answers['שאלה 3: תעסוקה'] = formData.get('q3') || 'לא נענה';
+            answers['שאלה 3: תעסוקה'] = getMultipleChecked('q3') || 'לא נבחר דבר';
 
             answers['שאלה 4: עדיפות - הכנסה שוטפת עכשיו (רמת חיים)'] = formData.get('q4_r1') || 'לא דורג';
             answers['שאלה 4: עדיפות - צמיחת נכסים ותשואה לטווח ארוך'] = formData.get('q4_r2') || 'לא דורג';
@@ -1312,7 +1371,8 @@
             answers['שאלה 9: רמת סיכון מתאימה'] = formData.get('q9') || 'לא נענה';
             answers['שאלה 10: העדפת יציבות על פני הזדמנות (1-5)'] = formData.get('q10') || 'לא דורג';
             answers['שאלה 11: גישה להלוואות ומינוף'] = formData.get('q11') || 'לא נענה';
-            answers['שאלה 12: חלוקת רווחים'] = formData.get('q12') || 'לא נענה';
+            const q12InvestmentPct = Number(formData.get('q12'));
+            answers['שאלה 12: חלוקת רווחים'] = `${q12InvestmentPct}% השקעה / ${100 - q12InvestmentPct}% חלוקה`;
 
             answers['שאלה 13: תרחיש השקעה (עמלה או עמל)'] = formData.get('q13') || 'לא נענה';
             answers['שאלה 14: גישה מועדפת לניהול מיזם'] = formData.get('q14') || 'לא נענה';
